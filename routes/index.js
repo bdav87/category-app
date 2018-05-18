@@ -4,7 +4,7 @@ const session = require('express-session');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'app' });
+  res.render('index', { data: 'app' });
 });
 
 module.exports = router;

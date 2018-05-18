@@ -16,8 +16,11 @@ const bc = new BigCommerce({
 router.get('/', (req, res) => {
     bc.authorize(req.query)
     .then(data => {
-        req.session.testing = data;
-        console.log(req.session.testing);
+        req.session.bc = bc.config;
+        req.session.bc.accessToken = data.accessToken;
+        req.session.bc.storeHash = data.context.split('/')[1];
+
+        console.log(req.session.bc);
         res.render('index', {data: data});
     })
     .catch(err => res.render('index', {data: `error:${err}`}))
