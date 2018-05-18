@@ -17,7 +17,7 @@ router.use(session());
 router.get('/', (req, res) => {
     bc.authorize(req.query)
     .then(data => res.render('index', {data: data}))
-    .catch(err => new Error(err))
+    .catch(err => res.render('index', {data: `error:${err}`}))
 })
 
 module.exports = router;
