@@ -1,9 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const session = require('express-session');
+const BigCommerce = require('node-bigcommerce');
 
 router.get('/', (req, res) => {
-    res.render('index', {data: req.session.bc})
+    const bc = req.session.bc;
+    console.log(req.session.bc);
+    try {
+        const data = bc.verify(req.query['signed_payload']);
+        res.render('index', {data: data})
+    } catch (err) {
+        console.log(err);
+        res.send(err);
+    }
+    
 })
 
 module.exports = router;
