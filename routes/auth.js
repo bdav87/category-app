@@ -12,11 +12,14 @@ const bc = new BigCommerce({
     apiVersion: 'v3'
 });
 
-router.use(session());
 
 router.get('/', (req, res) => {
     bc.authorize(req.query)
-    .then(data => res.render('index', {data: data}))
+    .then(data => {
+        req.session.testing = data;
+        console.log(req.session.testing);
+        res.render('index', {data: data});
+    })
     .catch(err => res.render('index', {data: `error:${err}`}))
 })
 
