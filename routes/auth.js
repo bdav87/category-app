@@ -7,7 +7,7 @@ const bc = new BigCommerce({
     logLevel: 'info',
     clientId: process.env.CLIENT_ID,
     secret: process.env.SECRET,
-    callback: '/load',
+    callback: '/auth',
     responseType: 'json',
     apiVersion: 'v3'
 });
@@ -15,8 +15,6 @@ const bc = new BigCommerce({
 router.use(session());
 
 router.get('/', (req, res) => {
-    req.session.bc = bc.config;
-
     bc.authorize(req.query)
     .then(data => {res.render('index', {data: data})
     .catch(err => new Error(err))
