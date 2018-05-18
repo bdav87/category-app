@@ -18,10 +18,8 @@ router.get('/', (req, res) => {
     req.session.bc = bc.config;
 
     bc.authorize(req.query)
-    .catch(error => console.log(error))
-    .then(data => {
-        req.session.bc.accessToken = data.accessToken;
-        res.render('index', {data: JSON.stringify(req.session.bc)})
+    .then(data => {res.render('index', {data: data})
+    .catch(err => new Error(err))
     })
 })
 
