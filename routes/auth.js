@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
     bc.authorize(req.query)
     .then(data => {
         req.session.bc = bc.config;
-        req.session.bc.accessToken = data.accessToken;
+        req.session.bc.accessToken = data.access_token;
         req.session.bc.storeHash = data.context.split('/')[1];
 
         console.log(req.session.bc);
