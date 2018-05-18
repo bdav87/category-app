@@ -7,7 +7,7 @@ const bc = new BigCommerce({
     logLevel: 'info',
     clientId: process.env.CLIENT_ID,
     secret: process.env.SECRET,
-    callback: '/auth',
+    callback: 'https://category-app.dreamhosters.com/auth',
     responseType: 'json',
     apiVersion: 'v3'
 });
