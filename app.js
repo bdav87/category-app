@@ -10,8 +10,6 @@ const authRouter = require('./routes/auth');
 const loadRouter = require('./routes/load');
 const uninstallRouter = require('./routes/uninstall');
 
-const session = require('express-session');
-
 const app = express();
 
 // view engine setup
@@ -25,12 +23,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('trust proxy', true);
-app.use(session({
-  secret: 'makeitbig',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {secure: true}
-}))
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

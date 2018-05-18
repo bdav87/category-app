@@ -12,6 +12,13 @@ const bc = new BigCommerce({
     apiVersion: 'v3'
 });
 
+router.use(session({
+    secret: 'makeitbig',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {secure: true}
+  }))
+
 
 router.get('/', (req, res) => {
     bc.authorize(req.query)
