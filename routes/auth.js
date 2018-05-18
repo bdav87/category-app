@@ -20,6 +20,7 @@ router.get('/', (req, res) => {
     bc.authorize(req.query)
     .catch(error => console.log(error))
     .then(data => {
+        req.session.bc.accessToken = data.accessToken;
         res.render('index', {data: JSON.stringify(req.session.bc)})
     })
 })
