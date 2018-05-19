@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
+const bc_lib = require('../lib/bc_auth');
 
 router.get('/', (req,res) => {
+    console.log(bc_lib());
     res.send('api');
 })
 
@@ -48,7 +50,6 @@ router.get('/single', (req,res) => {
     }
 
     function createSampleCategory(bc) {
-        console.log(`did we get bc: ${JSON.stringify(bc)}`);
         let category = {
             parent_id: 0,
             name: `Sample Category ${Math.round(Math.random() * 1000000)}`,
@@ -56,7 +57,7 @@ router.get('/single', (req,res) => {
         }
         bc.post('/catalog/categories', category)
         .then(data => res.send(data))
-        .catch(err => res.send(`There was an error ${err}. BC: ${JSON.stringify(bc)}`))
+        .catch(err => res.send(`There was an error: ${err}.}`))
     }
     
 })
