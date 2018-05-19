@@ -36,7 +36,7 @@ router.get('/', (req, res) => {
         const bc = new BigCommerce({
             clientId: clientId,
             secret: secret,
-            hash: hash,
+            storeHash: hash,
             accessToken: accessToken,
             responseType: 'json',
             apiVersion: 'v3'
