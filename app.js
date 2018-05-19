@@ -9,6 +9,7 @@ const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
 const loadRouter = require('./routes/load');
 const uninstallRouter = require('./routes/uninstall');
+const apiRouter = require('./routes/api');
 
 const fs = require('fs');
 const hbs = require('hbs');
@@ -46,6 +47,7 @@ app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/load', loadRouter);
 app.use('/uninstall', uninstallRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
