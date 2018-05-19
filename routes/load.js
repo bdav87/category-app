@@ -5,15 +5,51 @@ const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
 
 router.get('/', (req, res) => {
-    const bc = req.session.bc;
-    console.log(req.session.bc);
-    try {
-        const data = bc.verify(req.query['signed_payload']);
-        res.render('index', {data: data})
-    } catch (err) {
-        console.log(err);
-        res.send(err);
-    }
+    const connection = mysql.createConnection({
+        host: process.env.SQLHOST,
+        user: process.env.SQLUN,
+        password: process.env.SQLPW,
+        database: 'cat_app_db'
+      });
+    
+    connection.connect();
+    
+    connection.query('SELECT * FROM bc_config WHERE id=1', (error, results) => {
+        let accessToken, hash, clientId, secret;
+
+        if (error) {
+            throw error;
+        }
+        const db_result = results[0];
+        
+        accessToken = db_result.access_token;
+        hash = db_result.hash;
+        clientId = db_result.client_id;
+        secret = db_result.secret;
+        
+        verifyAndRender(accessToken, hash, clientId, secret);
+    })
+    
+    function verifyAndRender(accessToken, hash, clientId, secret) {
+        connection.end();
+
+        const bc = new BigCommerce({
+            clientId: clientId,
+            secret: secret,
+            hash: hash,
+            accessToken: accessToken,
+            responseType: 'json',
+            apiVersion: 'v3'
+        });
+
+        try {
+            const data = bc.verify(req.query['signed_payload']);
+            res.render('index', {data: data})
+        } catch (err) {
+            console.log(err);
+            res.send(err);
+        }
+    }  
     
 })
 
