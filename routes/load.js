@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const session = require('express-session');
 const BigCommerce = require('node-bigcommerce');
+const mysql = require('mysql');
 
 router.get('/', (req, res) => {
     const bc = req.session.bc;
