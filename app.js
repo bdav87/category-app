@@ -5,14 +5,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require('express-session');
 
-app.use(session({
-  secret: process.env.SECRET,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {secure: true}
-}));
-
-
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
@@ -20,6 +12,13 @@ const loadRouter = require('./routes/load');
 const uninstallRouter = require('./routes/uninstall');
 
 const app = express();
+
+app.use(session({
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {secure: true}
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
