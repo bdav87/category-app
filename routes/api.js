@@ -48,6 +48,7 @@ router.get('/single', (req,res) => {
     }
 
     function createSampleCategory(bc) {
+        console.log(`did we get bc: ${bc}`);
         let category = {
             parent_id: 0,
             name: `Sample Category ${Math.round(Math.random() * 1000000)}`,
