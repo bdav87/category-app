@@ -5,8 +5,8 @@ const mysql = require('mysql');
 const bc_lib = require('../lib/bc_auth');
 
 router.get('/', (req,res) => {
-    console.log(bc_lib());
-    res.send('api');
+    bc_lib().then((data) => res.send(data))
+    //res.send('api');
 })
 
 router.get('/single', (req,res) => {
