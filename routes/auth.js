@@ -48,7 +48,7 @@ router.get('/', (req, res) => {
             bc.config.accessToken = data.access_token;
             bc.config.storeHash = data.context.split('/')[1];
             */
-            connection.query(`UPDATE bc_config SET access_token=${data.access_token}`, (error,results) => {
+            connection.query(`UPDATE bc_config SET access_token="${data.access_token}" WHERE id=1`, (error,results) => {
                 if (error) {
                     throw error;
                 }
