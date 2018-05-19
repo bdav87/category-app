@@ -6,7 +6,7 @@ const mysql = require('mysql');
 let bc;
 
 
-router.get('/single', (req,res) => {
+router.get('single', (req,res) => {
     const connection = mysql.createConnection({
         host: process.env.SQLHOST,
         user: process.env.SQLUN,
