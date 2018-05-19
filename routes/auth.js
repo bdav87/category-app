@@ -48,7 +48,7 @@ router.get('/', (req, res) => {
                     throw error;
                 }
             });
-            connection.end(() => res.render('index', {data: JSON.stringify(data)}));
+            connection.end(() => res.render('index', {loaded: true}));
         })
         .catch(err => res.render('index', {data: `error:${err}`}))
     }
