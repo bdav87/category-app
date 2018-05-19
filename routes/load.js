@@ -26,7 +26,7 @@ router.get('/', (req, res) => {
         hash = db_result.hash;
         clientId = db_result.client_id;
         secret = db_result.secret;
-        
+
         verifyAndRender(accessToken, hash, clientId, secret);
     })
     
@@ -44,7 +44,7 @@ router.get('/', (req, res) => {
 
         try {
             const data = bc.verify(req.query['signed_payload']);
-            res.render('index', {data: data})
+            res.render('index', {data: JSON.stringify(bc)})
         } catch (err) {
             console.log(err);
             res.send(err);

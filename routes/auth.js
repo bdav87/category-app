@@ -48,8 +48,12 @@ router.get('/', (req, res) => {
             bc.config.accessToken = data.access_token;
             bc.config.storeHash = data.context.split('/')[1];
             */
-            connection.query(`UPDATE bc_config SET access_token=${data.access_token}`);
-            connection.end(() => res.render('index', {data: data}));
+            connection.query(`UPDATE bc_config SET access_token=${data.access_token}`, (error,results) => {
+                if (error) {
+                    throw error;
+                }
+            });
+            connection.end(() => res.render('index', {data: JSON.stringify(data)}));
         })
         .catch(err => res.render('index', {data: `error:${err}`}))
     }
