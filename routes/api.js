@@ -48,7 +48,7 @@ router.get('/single', (req,res) => {
     }
 
     function createSampleCategory(bc) {
-        console.log(`did we get bc: ${bc}`);
+        console.log(`did we get bc: ${JSON.stringify(bc)}`);
         let category = {
             parent_id: 0,
             name: `Sample Category ${Math.round(Math.random() * 1000000)}`,
@@ -56,7 +56,7 @@ router.get('/single', (req,res) => {
         }
         bc.post('/categories', category)
         .then(data => res.send(data))
-        .catch(err => res.send(`There was an error ${err}. BC: ${bc}`))
+        .catch(err => res.send(`There was an error ${err}. BC: ${JSON.stringify(bc)}`))
     }
     
 })
