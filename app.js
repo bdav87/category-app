@@ -10,6 +10,23 @@ const authRouter = require('./routes/auth');
 const loadRouter = require('./routes/load');
 const uninstallRouter = require('./routes/uninstall');
 
+const fs = require('fs');
+const hbs = require('hbs');
+
+const partialsDir = __dirname + '/views/partials';
+
+const filenames = fs.readdirSync(partialsDir);
+
+filenames.forEach(function (filename) {
+  var matches = /^([^.]+).hbs$/.exec(filename);
+  if (!matches) {
+    return;
+  }
+  var name = matches[1];
+  var template = fs.readFileSync(partialsDir + '/' + filename, 'utf8');
+  hbs.registerPartial(name, template);
+});
+
 const app = express();
 
 // view engine setup

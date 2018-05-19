@@ -45,7 +45,7 @@ router.get('/', (req, res) => {
         try {
             const data = bc.verify(req.query['signed_payload']);
             console.log(data);
-            res.render('index', {data: JSON.stringify(bc)})
+            res.render('index', {loaded: true})
         } catch (err) {
             throw err;
             res.send(err);

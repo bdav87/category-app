@@ -1,8 +1,32 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #f6f7f9;
+  color: #34313f;
+  font-family: "Source Sans Pro",Arial,"Helvetica Neue",sans-serif;
+  font-weight: 400;
+  padding: 20px 0 0;
 }
 
 a {
   color: #00B7FF;
+}
+
+nav {
+  padding-bottom: 30px;
+}
+
+.heading {
+  color: #34313f;
+  font-size: 30px;
+  font-weight: 300;
+  line-height: 1.3334;
+}
+.nav-link {
+  color:#86848c;
+}
+.nav-link.active{
+  color:#34313f;
+  border: 0;
+  background: none !important;
+  border-color: rgba(0,0,0,0) !important;
+  border-bottom: 4px solid #4b71fc !important;
 }
