@@ -11,14 +11,14 @@ const bc = new BigCommerce({
     responseType: 'json',
     apiVersion: 'v3'
 });
-
+/*
 router.use(session({
-    secret: 'makeitbig',
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {secure: true}
   }))
-
+*/
 
 router.get('/', (req, res) => {
     bc.authorize(req.query)
@@ -26,7 +26,6 @@ router.get('/', (req, res) => {
         req.session.bc = bc;
         req.session.bc.config.accessToken = data.access_token;
         req.session.bc.config.storeHash = data.context.split('/')[1];
-
         console.log(req.session.bc);
         res.render('index', {data: JSON.stringify(req.session.bc)});
     })
