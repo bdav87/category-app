@@ -29,8 +29,6 @@ router.get('/', (req, res) => {
         
         completeAuth(clientId, secret);
       });
-
-    //connection.end(() => completeAuth(clientId, secret));
     
     function completeAuth(clientId, secret){
         const bc = new BigCommerce({
@@ -44,10 +42,7 @@ router.get('/', (req, res) => {
 
         bc.authorize(req.query)
         .then(data => {
-            /*
-            bc.config.accessToken = data.access_token;
-            bc.config.storeHash = data.context.split('/')[1];
-            */
+
             connection.query(`UPDATE bc_config SET access_token="${data.access_token}" WHERE id=1`, (error,results) => {
                 if (error) {
                     throw error;
