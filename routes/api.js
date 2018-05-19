@@ -56,7 +56,7 @@ router.get('/single', (req,res) => {
         }
         bc.post('/categories', category)
         .then(data => res.send(data))
-        .catch(err => res.send(`There was an error ${err}`))
+        .catch(err => res.send(`There was an error ${err}. BC: ${bc}`))
     }
     
 })
