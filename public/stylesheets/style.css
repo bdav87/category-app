@@ -1,8 +1,17 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #f6f7f9;
+  color: #34313f;
+  font-family: "Source Sans Pro",Arial,"Helvetica Neue",sans-serif;
+  font-weight: 400;
 }
 
 a {
   color: #00B7FF;
+}
+
+.heading {
+  color: #34313f;
+  font-size: 30px;
+  font-weight: 300;
+  line-height: 1.3334;
 }

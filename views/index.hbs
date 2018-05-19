@@ -1,5 +1,49 @@
-<h1>Category Import/Export</h1>
-{{#if data}}
-<p>Data</p>
-<p style="word-wrap: break-word">{{data}}</p>
+{{#if test}}
+<div class='row'>
+    <div class='col'>
+        <div>
+        <h3 class='heading'>Category import and export</h3>
+        <p>Import and export product categories with a CSV file.</p>
+        </div>
+    </div>
+</div>
+
+<div class='row'>
+    <div class='col'>
+        <nav>
+            <div class='nav nav-tabs' id='nav-tab' role='tab-list'>
+                <a 
+                    class='nav-item nav-link active' 
+                    id='nav-import-tab' 
+                    data-toggle="tab" 
+                    href='#nav-import' 
+                    role='tab'
+                    aria-controls="nav-import" 
+                    aria-selected="true">Import</a>
+                <a 
+                    class='nav-item nav-link' 
+                    id='nav-export-tab' 
+                    data-toggle="tab" 
+                    href='#nav-export' 
+                    role='tab'
+                    aria-controls="nav-export" 
+                    aria-selected="false">Export</a> 
+                <a 
+                    class='nav-item nav-link' 
+                    id='nav-instructions-tab' 
+                    data-toggle="tab" 
+                    href='#nav-instructions' 
+                    role='tab'
+                    aria-controls="nav-instructions" 
+                    aria-selected="false">Instructions</a>  
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-import" role="tabpanel" aria-labelledby="nav-import-tab">Import stuff</div>
+            <div class="tab-pane fade" id="nav-export" role="tabpanel" aria-labelledby="nav-export-tab">Export CSV</div>
+            <div class="tab-pane fade" id="nav-instructions" role="tabpanel" aria-labelledby="nav-instructions-tab">Instructions</div>
+        </div>
+
+    </div>
+</div>
 {{/if}}
