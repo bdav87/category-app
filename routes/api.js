@@ -45,21 +45,21 @@ router.get('/export', (req, res) => {
     function streamToCSV(category_page){
         console.log('stream func running');
         const csv_headers = [
-            id,
-            parent_id,
-            name,
-            description,
-            views,
-            sort_order,
-            page_title,
-            meta_keywords,
-            meta_description,
-            layout_file,
-            image_url,
-            is_visible,
-            search_keywords,
-            default_product_sort,
-            custom_url
+            'id',
+            'parent_id',
+            'name',
+            'description',
+            'views',
+            'sort_order',
+            'page_title',
+            'meta_keywords',
+            'meta_description',
+            'layout_file',
+            'image_url',
+            'is_visible',
+            'search_keywords',
+            'default_product_sort',
+            'custom_url'
         ]
         let data = category_page;
         res.send(data);
