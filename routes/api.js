@@ -35,12 +35,10 @@ router.get('/single', (req,res) => {
 router.get('/export', (req, res) => {
 
     function exportCategories(bc_api) {
+        console.log(bc_api);
         bc_api.get('/catalog/categories?limit=250')
-        .then(data => {
-            //res.render('index', {data: JSON.stringify(data), development: true})
-            streamToCSV(data);
-        })
-        .catch(err => res.render('index', {data: JSON.stringify(err), development: true}))
+        .then(data => streamToCSV(data))
+        .catch(err => res.render('index', {data: `error ${JSON.stringify(err)}`, development: true}))
     }
 
     function streamToCSV(category_page){
