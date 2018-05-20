@@ -60,15 +60,14 @@ router.get('/export', (req, res) => {
             'default_product_sort',
             'custom_url'
         ]
-        let category_list = category_page.data.map(category => category['name']);
+        let category_list = category_page.data.map(category => Object.assign({}, category))
+        
         console.log(category_list);
-        res.send(category_page.data);
+        res.send(category_list);
 
     }
 
-    function iterateOverKeys(obj) {
-        return Object.keys(obj)
-    }
+    
 
     if (bc) {
         exportCategories(bc);
