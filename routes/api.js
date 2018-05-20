@@ -3,11 +3,7 @@ const router = express.Router();
 const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
 const bcAuth = require('../lib/bc_auth');
-
-// TEST ROUTE to ensure auth library works
-router.get('/', (req,res) => {
-    bcAuth().then((data) => res.send(data))
-})
+const csv = require('fast-csv');
 
 // TEST ROUTE to generate a category
 router.get('/single', (req,res) => {
@@ -26,6 +22,19 @@ router.get('/single', (req,res) => {
         .catch(err => res.send(`There was an error: ${err}.}`))
     }
     
+})
+// When a user hits the export button all categories
+// will be exported into a CSV file
+router.get('/export', (req, res) => {
+    bcAuth()
+    .then(data => exportCategories(data))
+    .catch(error => res.send(`Error authenticating: ${error}`))
+
+    function exportCategories(bc_api) {
+        bc_api.get('/catalog/categories')
+        .then(data => res.render('index', {data: data, development: true}))
+        .catch(err => res.render('index', {data: err, development: true}))
+    }
 })
 
 module.exports = router;
