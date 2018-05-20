@@ -4,6 +4,7 @@ const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
 const bcAuth = require('../lib/bc_auth');
 const csv = require('fast-csv');
+const fs = require('fs');
 
 let bc;
 
@@ -62,7 +63,7 @@ router.get('/export', (req, res) => {
         ]
         let category_list = category_page.data.map(category => Object.assign({}, category))
         
-        console.log(category_list);
+        //console.log(category_list);
         let csvStream = csv.createWriteStream({headers: true});
         let writableStream = fs.createWriteStream('./test_files/test.csv');
 
