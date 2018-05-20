@@ -3,7 +3,6 @@ body {
   color: #34313f;
   font-family: "Source Sans Pro",Arial,"Helvetica Neue",sans-serif;
   font-weight: 400;
-  padding: 20px 0 0;
 }
 
 a {
@@ -29,4 +28,26 @@ nav {
   background: none !important;
   border-color: rgba(0,0,0,0) !important;
   border-bottom: 4px solid #4b71fc !important;
+}
+
+#dropTarget {
+  border-radius: 12px;
+  border: 2px dashed #d4d4d4;
+  min-height: 400px;
+  background: #FFF;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#dropTarget.drag {
+  border: 2px solid #a0d15e;
+  background: url('/images/drop-active.png');
+  color: white;
+}
+
+#main-container {
+  padding: 20px 48px 0;
 }
