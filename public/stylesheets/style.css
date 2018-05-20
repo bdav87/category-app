@@ -3,7 +3,6 @@ body {
   color: #34313f;
   font-family: "Source Sans Pro",Arial,"Helvetica Neue",sans-serif;
   font-weight: 400;
-  padding: 20px 0 0;
 }
 
 a {
@@ -47,4 +46,8 @@ nav {
   border: 2px solid #a0d15e;
   background: url('/images/drop-active.png');
   color: white;
+}
+
+#main-container {
+  padding: 20px 48px 0;
 }
