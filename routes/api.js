@@ -37,7 +37,6 @@ router.get('/export', (req, res) => {
     function exportCategories(bc_api) {
         bc_api.get('/catalog/categories?limit=250')
         .then(data => {
-            console.log(`API returned ${data}`)
             streamToCSV(data);
         })
     }
@@ -61,8 +60,9 @@ router.get('/export', (req, res) => {
             'default_product_sort',
             'custom_url'
         ]
-        let data = category_page;
-        res.send(data);
+        let category_list = category_page.map(category => category.data);
+        res.send(category_list);
+
     }
 
     function iterateOverKeys(obj) {
