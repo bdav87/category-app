@@ -42,7 +42,28 @@ router.get('/export', (req, res) => {
 
     function streamToCSV(category_page){
         console.log(category_page.data, category_page.meta);
-        res.send(category_page);
+
+        const csv_headers = [
+            id,
+            parent_id,
+            name,
+            description,
+            views,
+            sort_order,
+            page_title,
+            meta_keywords,
+            meta_description,
+            layout_file,
+            image_url,
+            is_visible,
+            search_keywords,
+            default_product_sort,
+            custom_url
+        ]
+
+        let category_list = category.page.data;
+        let preCSV = category_list.map(category => {category});
+        res.send(preCSV);
     }
 
     function iterateOverKeys(obj) {
