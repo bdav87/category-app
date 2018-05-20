@@ -13,9 +13,6 @@ bcAuth()
 .then(data => bc = data)
 .catch(err => console.log(err))
 
-router.use(path.join(__dirname, 'test_files'))
-
-
 // TEST ROUTE to generate a category
 router.get('/single', (req,res) => {
 
