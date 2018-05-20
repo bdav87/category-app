@@ -63,7 +63,7 @@ router.get('/export', (req, res) => {
 
         let category_list = category.page.data;
         let preCSV = category_list.map(category => {category});
-        res.send(preCSV);
+        res.send(JSON.stringify(preCSV));
     }
 
     function iterateOverKeys(obj) {
