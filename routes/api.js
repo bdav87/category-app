@@ -38,12 +38,13 @@ router.get('/export', (req, res) => {
         bc_api.get('/catalog/categories?limit=250')
         .then(data => {
             streamToCSV(data)
-            .then(result => {
+           /* .then(result => {
                 console.log(`result data: ${result}`)
                 res.send(result);
             })
-            .catch(err => console.log(`catalog error: ${err}`))
+            .catch(err => console.log(`catalog error: ${err}`))*/
         })
+        .then(res.send('k'))
         .catch(err => res.render('index', {data: `error ${JSON.stringify(err)}`, development: true}))
     }
 
@@ -69,7 +70,8 @@ router.get('/export', (req, res) => {
         ]
 
         let category_list = category.page.data;
-
+        console.log(`cat list: ${category_list}`)
+        /*
         return new Promise((resolve, reject) => {
             console.log('promise returned');
             console.log(category_list);
@@ -78,7 +80,7 @@ router.get('/export', (req, res) => {
             } else {
                 reject('nothing in category list')
             }
-        })
+        })*/
         
         //let preCSV = category_list.map(category => {category});
         
