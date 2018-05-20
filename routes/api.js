@@ -37,13 +37,12 @@ router.get('/export', (req, res) => {
     function exportCategories(bc_api) {
         bc_api.get('/catalog/categories?limit=250')
         .then(data => {
+            console.log(`API returned ${data}`)
             streamToCSV(data);
         })
-        .catch(err => res.send(`error ${JSON.stringify(err)}`))
     }
 
     function streamToCSV(category_page){
-        //console.log(category_page.data, category_page.meta);
         console.log('stream func running');
         const csv_headers = [
             id,
@@ -63,7 +62,7 @@ router.get('/export', (req, res) => {
             custom_url
         ]
         let data = category_page;
-        console.log(data);
+        res.send(data);
     }
 
     function iterateOverKeys(obj) {
