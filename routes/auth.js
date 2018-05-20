@@ -5,7 +5,10 @@ const session = require('express-session');
 const mysql = require('mysql');
 
 router.get('/', (req, res) => {
-    
+    if (!req.query.code) {
+        console.log(req.query);
+        res.status('403').end();
+    }
     const connection = mysql.createConnection({
         host: process.env.SQLHOST,
         user: process.env.SQLUN,
