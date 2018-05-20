@@ -41,6 +41,7 @@ router.get('/export', (req, res) => {
         .then(data => {
             streamToCSV(data);
         })
+        .catch(err => res.send(`Export error: ${err}.}`))
     }
 
     function streamToCSV(category_page){
@@ -69,7 +70,7 @@ router.get('/export', (req, res) => {
         let writableStream = fs.createWriteStream('test.csv');
         
         csvStream.pipe(writableStream);
-        csvStream.write(category_list);
+        csvStream.write(category_list[0]);
         writableStream.on('finish', function(){
             console.log('Done with CSV');
             res.download('test.csv', (err) => {
