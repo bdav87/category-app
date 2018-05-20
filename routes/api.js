@@ -60,7 +60,7 @@ router.get('/export', (req, res) => {
             'default_product_sort',
             'custom_url'
         ]
-        let category_list = category_page.data.map(category => category.data);
+        let category_list = category_page.data.map(category => {category});
         res.send(category_list);
 
     }
