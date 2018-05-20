@@ -63,10 +63,9 @@ router.get('/export', (req, res) => {
         ]
         let category_list = category_page.data.map(category => Object.assign({}, category))
         
-        //console.log(category_list);
         let csvStream = csv.createWriteStream({headers: true});
-        let writableStream = fs.createWriteStream('test.csv');
-        //writeableStream.open('../test_files');
+        let writableStream = fs.createWriteStream('../test_files/test.csv');
+
         csvStream.pipe(writableStream);
         csvStream.write(category_list);
         writableStream.on('finish', function(){
@@ -74,7 +73,7 @@ router.get('/export', (req, res) => {
         });
         csvStream.end();
 
-        res.send(category_list);
+        res.sendFile('../test_files/test.csv');
 
     }
 
