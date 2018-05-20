@@ -13,12 +13,7 @@ bcAuth()
 
 // TEST ROUTE to generate a category
 router.get('/single', (req,res) => {
-    /*
-    bcAuth()
-    .then(data => createSampleCategory(data))
-    .catch(error => res.send(`Error authenticating: ${error}`))
-    */
-    
+
     function createSampleCategory(bc_api) {
         let category = {
             parent_id: 0,
@@ -38,14 +33,15 @@ router.get('/single', (req,res) => {
 // When a user hits the export button all categories
 // will be exported into a CSV file
 router.get('/export', (req, res) => {
-    bcAuth()
-    .then(data => exportCategories(data))
-    .catch(error => res.send(`Error authenticating: ${error}`))
 
     function exportCategories(bc_api) {
-        bc_api.get('/catalog/categories')
+        bc_api.get('/catalog/categories?limit=250')
         .then(data => res.render('index', {data: JSON.stringify(data), development: true}))
         .catch(err => res.render('index', {data: JSON.stringify(err), development: true}))
+    }
+
+    if (bc) {
+        exportCategories(bc);
     }
 })
 
