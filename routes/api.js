@@ -45,7 +45,7 @@ router.get('/export', (req, res) => {
 
     function streamToCSV(category_page){
         console.log('stream func running');
-        console.log(`path: ${__dirname}`)
+        
         const csv_headers = [
             'id',
             'parent_id',
@@ -66,8 +66,8 @@ router.get('/export', (req, res) => {
         let category_list = category_page.data.map(category => Object.assign({}, category))
         
         let csvStream = csv.createWriteStream({headers: true});
-        let writableStream = fs.createWriteStream('../test_logs/test.csv');
-
+        let writableStream = fs.createWriteStream('../test_files/test.csv');
+        
         csvStream.pipe(writableStream);
         csvStream.write(category_list);
         writableStream.on('finish', function(){
