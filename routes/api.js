@@ -65,10 +65,9 @@ router.get('/export', (req, res) => {
         
         //console.log(category_list);
         let csvStream = csv.createWriteStream({headers: true});
-        let writableStream = fs.createWriteStream('../test_files/test.csv');
-
-        csvStream.pipe(writableStream);
-        csvStream.write(category_list);
+        let writableStream = fs.createWriteStream('test.csv');
+        //writeableStream.open('../test_files');
+        csvStream.write(category_list).pipe(writableStream);
         csvStream.end();
 
         res.send(category_list);
