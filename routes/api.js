@@ -45,6 +45,7 @@ router.get('/export', (req, res) => {
 
     function streamToCSV(category_page){
         console.log('stream func running');
+        console.log(`path: ${__dirname}`)
         const csv_headers = [
             'id',
             'parent_id',
@@ -71,7 +72,7 @@ router.get('/export', (req, res) => {
         csvStream.write(category_list);
         writableStream.on('finish', function(){
             console.log('Done with CSV');
-            console.log(`path: ${__dirname}`)
+            
         });
         csvStream.end();
         
