@@ -36,13 +36,13 @@ router.get('/export', (req, res) => {
 
     function exportCategories(bc_api) {
         bc_api.get('/catalog/categories?limit=250')
-        .then(data => res.send(data))
+        .then(data => streamToCSV(data))
         .catch(err => res.render('index', {data: `error ${JSON.stringify(err)}`, development: true}))
     }
 
     function streamToCSV(category_page){
         let category_list = category_page.map(category => category.data);
-        res.send(category_list);
+        res.send(category_page);
     }
 
     function iterateOverKeys(obj) {
