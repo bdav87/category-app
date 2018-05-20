@@ -41,7 +41,7 @@ router.get('/export', (req, res) => {
     }
 
     function streamToCSV(category_page){
-        console.log(category_page.data, category_page.meta);
+        //console.log(category_page.data, category_page.meta);
 
         const csv_headers = [
             id,
@@ -62,6 +62,7 @@ router.get('/export', (req, res) => {
         ]
 
         let category_list = category.page.data;
+        console.log(category_list);
         //let preCSV = category_list.map(category => {category});
         res.send(category_list);
     }
