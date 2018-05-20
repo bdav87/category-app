@@ -41,7 +41,7 @@ router.get('/export', (req, res) => {
     }
 
     function streamToCSV(category_page){
-        //let category_list = category_page.map(category => category.data);
+        console.log(category_page.data, category_page.meta);
         res.send(category_page);
     }
 
