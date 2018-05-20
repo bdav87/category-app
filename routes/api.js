@@ -32,8 +32,8 @@ router.get('/export', (req, res) => {
 
     function exportCategories(bc_api) {
         bc_api.get('/catalog/categories')
-        .then(data => res.render('index', {data: data, development: true}))
-        .catch(err => res.render('index', {data: err, development: true}))
+        .then(data => res.render('index', {data: JSON.stringify(data), development: true}))
+        .catch(err => res.render('index', {data: JSON.stringify(err), development: true}))
     }
 })
 
