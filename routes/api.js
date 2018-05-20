@@ -5,12 +5,20 @@ const mysql = require('mysql');
 const bcAuth = require('../lib/bc_auth');
 const csv = require('fast-csv');
 
+let bc;
+
+bcAuth()
+.then(data => bc = data)
+.catch(err => console.log(err))
+
 // TEST ROUTE to generate a category
 router.get('/single', (req,res) => {
+    /*
     bcAuth()
     .then(data => createSampleCategory(data))
     .catch(error => res.send(`Error authenticating: ${error}`))
-
+    */
+    
     function createSampleCategory(bc_api) {
         let category = {
             parent_id: 0,
@@ -20,6 +28,10 @@ router.get('/single', (req,res) => {
         bc_api.post('/catalog/categories', category)
         .then(data => res.send(data))
         .catch(err => res.send(`There was an error: ${err}.}`))
+    }
+
+    if (bc) {
+        createSampleCategory(bc);
     }
     
 })
