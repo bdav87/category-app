@@ -63,3 +63,4 @@ typings/
 # custom entries
 .DS_store
 /test-files
+*.csv

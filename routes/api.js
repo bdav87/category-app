@@ -72,17 +72,17 @@ router.get('/export', (req, res) => {
         csvStream.write(category_list);
         writableStream.on('finish', function(){
             console.log('Done with CSV');
-            
-        });
-        csvStream.end();
-        
-        
-        res.sendFile('test.csv', { root: '../'}, (err) => {
+            res.download('test.csv', (err) => {
             if (err) {
                 console.log(`csv send err: ${err}`)
             }
         });
 
+        });
+        csvStream.end();
+        
+        
+        
     }
 
     

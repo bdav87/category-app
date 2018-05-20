@@ -40,9 +40,10 @@ document.addEventListener('DOMContentLoaded', function(){
       let button = document.getElementById('export-btn');
       button.addEventListener('click', (event) => {
         event.preventDefault();
-        $.get('/api/export', (data) => {
+	window.location = '/api/export';
+        /*$.get('/api/export', (data) => {
           console.log(data);
-        })
+        })*/
       });
     }
     
