@@ -36,7 +36,11 @@ router.get('/export', (req, res) => {
 
     function exportCategories(bc_api) {
         bc_api.get('/catalog/categories?limit=250')
-        .then(data => streamToCSV(data))
+        .then(data => {
+            streamToCSV(data)
+            .then(result => res.send(result))
+            .catch(err => console.log(`catalog error: ${err}`))
+        })
         .catch(err => res.render('index', {data: `error ${JSON.stringify(err)}`, development: true}))
     }
 
@@ -62,11 +66,17 @@ router.get('/export', (req, res) => {
         ]
 
         let category_list = category.page.data;
-        console.log(category_list);
+
+        return new Promise((resolve, reject) => {
+            console.log(category_list);
+            if (category_list.length > 0) {
+                resolve(category_list);
+            } else {
+                reject('nothing in category list')
+            }
+        })
+        
         //let preCSV = category_list.map(category => {category});
-        if (category_list) {
-            res.send(category_list);
-        }
         
     }
 
