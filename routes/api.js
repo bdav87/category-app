@@ -5,12 +5,16 @@ const mysql = require('mysql');
 const bcAuth = require('../lib/bc_auth');
 const csv = require('fast-csv');
 const fs = require('fs');
+const path = require('path');
 
 let bc;
 
 bcAuth()
 .then(data => bc = data)
 .catch(err => console.log(err))
+
+router.use(path.join(__dirname, 'test_files'))
+
 
 // TEST ROUTE to generate a category
 router.get('/single', (req,res) => {
@@ -64,7 +68,7 @@ router.get('/export', (req, res) => {
         let category_list = category_page.data.map(category => Object.assign({}, category))
         
         let csvStream = csv.createWriteStream({headers: true});
-        let writableStream = fs.createWriteStream('../test_files/test.csv');
+        let writableStream = fs.createWriteStream('test.csv');
 
         csvStream.pipe(writableStream);
         csvStream.write(category_list);
@@ -73,9 +77,7 @@ router.get('/export', (req, res) => {
         });
         csvStream.end();
         
-        let options = {
-            root: __dirname + '/test_files/'
-        }
+        
         res.sendFile('test.csv' , options, (err) => {
             if (err) {
                 console.log(`csv send err: ${err}`)
