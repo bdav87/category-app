@@ -77,7 +77,7 @@ router.get('/export', (req, res) => {
         csvStream.end();
         
         
-        res.sendFile('test.csv', { root: __dirname + '/test_logs/'}, (err) => {
+        res.sendFile('test.csv', { root: '../'}, (err) => {
             if (err) {
                 console.log(`csv send err: ${err}`)
             }
