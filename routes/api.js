@@ -71,6 +71,7 @@ router.get('/export', (req, res) => {
         csvStream.write(category_list);
         writableStream.on('finish', function(){
             console.log('Done with CSV');
+            console.log(`path: ${__dirname}`)
         });
         csvStream.end();
         
