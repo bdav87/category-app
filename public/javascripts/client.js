@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function(){
-    DragDrop('#dropTarget', function (files, pos, fileList) {
+
+    if (document.getElementById('dropTarget')){
+      DragDrop('#dropTarget', function (files, pos, fileList) {
         console.log('Here are the dropped files', files)
         console.log('Dropped at coordinates', pos.x, pos.y)
         console.log('Here is the raw FileList object if you need it:', fileList)
@@ -28,4 +30,21 @@ document.addEventListener('DOMContentLoaded', function(){
           reader.readAsArrayBuffer(file)
         })
       })
+    }
+
+    if(document.getElementById('export-btn')) {
+      prepExportbutton();
+    }
+    
+    function prepExportbutton(){
+      let button = document.getElementById('export-btn');
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+	window.location = '/api/export';
+        /*$.get('/api/export', (data) => {
+          console.log(data);
+        })*/
+      });
+    }
+    
 })

@@ -4,6 +4,8 @@ const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
 const bcAuth = require('../lib/bc_auth');
 const csv = require('fast-csv');
+const fs = require('fs');
+const path = require('path');
 
 let bc;
 
@@ -34,10 +36,54 @@ router.get('/single', (req,res) => {
 // will be exported into a CSV file
 router.get('/export', (req, res) => {
 
-    function exportCategories(bc_api) {
-        bc_api.get('/catalog/categories?limit=250')
-        .then(data => res.render('index', {data: JSON.stringify(data), development: true}))
-        .catch(err => res.render('index', {data: JSON.stringify(err), development: true}))
+    let date = new Date().toDateString().split(' ').join('');
+    let filename = `category-export-${date}.csv`;
+
+    let csvStream = csv.createWriteStream({headers: true});
+    let writableStream = fs.createWriteStream(filename);
+    
+    function exportCategories(bc_api, path='?page=1&limit=250') {
+        bc_api.get(`/catalog/categories${path}`)
+        .then(categories => {
+            streamToCSV(categories.data, categories.meta.pagination);
+        })
+        .catch(err => res.send(`Export error: ${err}.}`))
+    }
+
+    function streamToCSV(categories, meta){
+        console.log(categories, meta);
+        
+        let category_list = categories.map(category => Object.assign({}, category))
+        
+        csvStream.pipe(writableStream);
+
+        if (meta.current_page < meta.total_pages) {
+            console.log('meta.current_page < meta.total_pages');
+
+            category_list.forEach(category => csvStream.write(category))
+
+            let path = meta.links.next;
+
+            return exportCategories(bc, path);
+        }
+
+        if (meta.current_page == meta.total_pages) {
+            category_list.forEach(category => csvStream.write(category));
+
+            csvStream.end();
+        }
+
+        writableStream.on('finish', function(){
+            console.log('Done with CSV');
+
+            res.download(filename, (err) => {
+            if (err) {
+                console.log(`csv send err: ${err}`)
+            }
+        });
+
+        });
+        
     }
 
     if (bc) {
