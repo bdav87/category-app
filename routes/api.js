@@ -70,7 +70,7 @@ router.get('/export', (req, res) => {
                     category_list.forEach(writeAndPublishCSV);
                 }
                 function writeToCSV(element, index, array){
-                    console.log(index, array.length);
+                    //console.log(index, array.length);
                     if (index == array.length - 1) {
                         csvStream.write(element);
                         const path = meta.links.next;
@@ -90,6 +90,7 @@ router.get('/export', (req, res) => {
                     }
                 }
         }
+        determinePageForCSV();
 
         writableStream.on('finish', function(){
             console.log('Done with CSV');
