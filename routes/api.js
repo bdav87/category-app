@@ -38,10 +38,11 @@ router.get('/export', (req, res) => {
 
     let date = new Date().toDateString().split(' ').join('');
     let filename = `category-export-${date}.csv`;
-
     let csvStream = csv.createWriteStream({headers: true});
     let writableStream = fs.createWriteStream(filename);
+
     csvStream.pipe(writableStream);
+    
     function exportCategories(bc_api, path) {
         bc_api.get(`/catalog/categories${path}`)
         .then(categories => {
@@ -51,38 +52,28 @@ router.get('/export', (req, res) => {
     }
 
     function streamToCSV(categories, meta){
-        //console.log(categories, meta);
         
         const category_list = categories.map(category => Object.assign({}, category))
-        console.log(`cat length: ${category_list.length}`);
-        //csvStream.pipe(writableStream);
 
         function determinePageForCSV(current_categories){
                 
                 if (meta.current_page < meta.total_pages) {
-                    console.log(`writing page: ${meta.current_page}`);
-                    //category_list.forEach(category => csvStream.write(category))
-                    //return exportCategories(bc, path);
                     current_categories.forEach(writeToCSV);
                 }
                 if (meta.current_page == meta.total_pages) {
-                    console.log(`writing what should be the last page: ${meta.current_page}`);
-                    //category_list.forEach(category => csvStream.write(category));
-                    //csvStream.end();
                     current_categories.forEach(writeAndPublishCSV);
                 }
+
                 function writeToCSV(element, index, array){
-                    //console.log(index, array.length);
                     if (index == array.length - 1) {
                         csvStream.write(element);
                         const path = meta.links.next;
-                        console.log(`path: ${path}`);
+
                         exportCategories(bc, path);
                     } else {
                         csvStream.write(element);
                     }
                 }
-
                 function writeAndPublishCSV(element, index, array) {
                     if (index == array.length - 1) {
                         csvStream.write(element);
@@ -92,6 +83,7 @@ router.get('/export', (req, res) => {
                     }
                 }
         }
+
         determinePageForCSV(category_list);
 
         function sendCSV(){
