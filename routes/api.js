@@ -41,7 +41,7 @@ router.get('/export', (req, res) => {
 
     let csvStream = csv.createWriteStream({headers: true});
     let writableStream = fs.createWriteStream(filename);
-    
+    csvStream.pipe(writableStream);
     function exportCategories(bc_api, path) {
         bc_api.get(`/catalog/categories${path}`)
         .then(categories => {
@@ -55,11 +55,12 @@ router.get('/export', (req, res) => {
         
         const category_list = categories.map(category => Object.assign({}, category))
         console.log(`cat length: ${category_list.length}`);
-        csvStream.pipe(writableStream);
+        //csvStream.pipe(writableStream);
 
         function determinePageForCSV(){
-        
+                console.log(`writing page: ${meta.current_page}`);
                 if (meta.current_page < meta.total_pages) {
+                    
                     //category_list.forEach(category => csvStream.write(category))
                     //return exportCategories(bc, path);
                     category_list.forEach(writeToCSV);
