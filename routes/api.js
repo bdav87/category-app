@@ -36,44 +36,45 @@ router.get('/single', (req,res) => {
 // will be exported into a CSV file
 router.get('/export', (req, res) => {
 
-    function exportCategories(bc_api) {
-        bc_api.get('/catalog/categories?limit=250')
-        .then(data => {
-            streamToCSV(data);
+    function exportCategories(bc_api, path='?page=1&limit=250') {
+        bc_api.get(`/catalog/categories${path}`)
+        .then(categories => {
+            streamToCSV(categories.data, meta.pagination);
         })
         .catch(err => res.send(`Export error: ${err}.}`))
     }
 
-    function streamToCSV(category_page){
-        console.log('stream func running');
+    function streamToCSV(categories, meta){
+        console.log(categories, meta);
         
-        const csv_headers = [
-            'id',
-            'parent_id',
-            'name',
-            'description',
-            'views',
-            'sort_order',
-            'page_title',
-            'meta_keywords',
-            'meta_description',
-            'layout_file',
-            'image_url',
-            'is_visible',
-            'search_keywords',
-            'default_product_sort',
-            'custom_url'
-        ]
-        let category_list = category_page.data.map(category => Object.assign({}, category))
-        
+        let category_list = categories.map(category => Object.assign({}, category))
+
+
         let csvStream = csv.createWriteStream({headers: true});
         let writableStream = fs.createWriteStream('test.csv');
         
         csvStream.pipe(writableStream);
-        category_list.forEach(category => csvStream.write(category))
-        //csvStream.write(category_list[0]);
+
+
+        if (meta.current_page < meta.total_pages) {
+            console.log('meta.current_page < meta.total_pages');
+
+            category_list.forEach(category => csvStream.write(category))
+
+            let path = meta.links.next;
+
+            return exportCategories(bc, path);
+        }
+
+        if (category_meta.current_page == category_meta.total_pages) {
+            category_list.forEach(category => csvStream.write(category));
+
+            csvStream.end();
+        }
+
         writableStream.on('finish', function(){
             console.log('Done with CSV');
+
             res.download('test.csv', (err) => {
             if (err) {
                 console.log(`csv send err: ${err}`)
@@ -81,13 +82,8 @@ router.get('/export', (req, res) => {
         });
 
         });
-        csvStream.end();
-        
-        
         
     }
-
-    
 
     if (bc) {
         exportCategories(bc);
