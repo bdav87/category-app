@@ -70,11 +70,12 @@ router.get('/export', (req, res) => {
                     category_list.forEach(writeAndPublishCSV);
                 }
                 function writeToCSV(element, index, array){
+                    console.log(index, array.length);
                     if (index == array.length - 1) {
                         csvStream.write(element);
                         const path = meta.links.next;
                         console.log(`path: ${path}`);
-                        return exportCategories(bc, path);
+                        exportCategories(bc, path);
                     } else {
                         csvStream.write(element);
                     }
