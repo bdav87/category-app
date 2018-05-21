@@ -53,13 +53,13 @@ router.get('/export', (req, res) => {
     function streamToCSV(categories, meta){
         console.log(categories, meta);
         
-        let category_list = categories.map(category => Object.assign({}, category))
+        const category_list = categories.map(category => Object.assign({}, category))
         
         csvStream.pipe(writableStream);
 
         if (meta.current_page < meta.total_pages) {
             category_list.forEach(category => csvStream.write(category))
-            let path = meta.links.next;
+            const path = meta.links.next;
 
             return exportCategories(bc, path);
         }
