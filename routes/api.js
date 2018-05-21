@@ -36,6 +36,9 @@ router.get('/single', (req,res) => {
 // will be exported into a CSV file
 router.get('/export', (req, res) => {
 
+    let csvStream = csv.createWriteStream({headers: true});
+    let writableStream = fs.createWriteStream('test.csv');
+
     function exportCategories(bc_api, path='?page=1&limit=250') {
         bc_api.get(`/catalog/categories${path}`)
         .then(categories => {
@@ -48,13 +51,8 @@ router.get('/export', (req, res) => {
         console.log(categories, meta);
         
         let category_list = categories.map(category => Object.assign({}, category))
-
-
-        let csvStream = csv.createWriteStream({headers: true});
-        let writableStream = fs.createWriteStream('test.csv');
         
         csvStream.pipe(writableStream);
-
 
         if (meta.current_page < meta.total_pages) {
             console.log('meta.current_page < meta.total_pages');
