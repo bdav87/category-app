@@ -42,7 +42,7 @@ router.get('/export', (req, res) => {
     let csvStream = csv.createWriteStream({headers: true});
     let writableStream = fs.createWriteStream(filename);
     
-    function exportCategories(bc_api, path='?page=1&limit=250') {
+    function exportCategories(bc_api, path) {
         bc_api.get(`/catalog/categories${path}`)
         .then(categories => {
             streamToCSV(categories.data, categories.meta.pagination);
@@ -84,7 +84,7 @@ router.get('/export', (req, res) => {
     }
 
     if (bc) {
-        exportCategories(bc);
+        exportCategories(bc, '?page=1&limit=250');
     }
 })
 
