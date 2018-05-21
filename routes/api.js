@@ -36,9 +36,12 @@ router.get('/single', (req,res) => {
 // will be exported into a CSV file
 router.get('/export', (req, res) => {
 
-    let csvStream = csv.createWriteStream({headers: true});
-    let writableStream = fs.createWriteStream('test.csv');
+    let date = new Date().toDateString().split(' ').join('');
+    let filename = `category-export-${date}.csv`;
 
+    let csvStream = csv.createWriteStream({headers: true});
+    let writableStream = fs.createWriteStream(filename);
+    
     function exportCategories(bc_api, path='?page=1&limit=250') {
         bc_api.get(`/catalog/categories${path}`)
         .then(categories => {
@@ -73,7 +76,7 @@ router.get('/export', (req, res) => {
         writableStream.on('finish', function(){
             console.log('Done with CSV');
 
-            res.download('test.csv', (err) => {
+            res.download(filename, (err) => {
             if (err) {
                 console.log(`csv send err: ${err}`)
             }
