@@ -57,17 +57,37 @@ router.get('/export', (req, res) => {
         console.log(`cat length: ${category_list.length}`);
         csvStream.pipe(writableStream);
 
-        if (meta.current_page < meta.total_pages) {
-            category_list.forEach(category => csvStream.write(category))
-            const path = meta.links.next;
+        function determinePageForCSV(){
+        
+                if (meta.current_page < meta.total_pages) {
+                    //category_list.forEach(category => csvStream.write(category))
+                    //return exportCategories(bc, path);
+                    category_list.forEach(writeToCSV);
+                }
+                if (meta.current_page == meta.total_pages) {
+                    //category_list.forEach(category => csvStream.write(category));
+                    //csvStream.end();
+                    category_list.forEach(writeAndPublishCSV);
+                }
+                function writeToCSV(element, index, array){
+                    if (index == array.length - 1) {
+                        csvStream.write(element);
+                        const path = meta.links.next;
+                        console.log(`path: ${path}`);
+                        return exportCategories(bc, path);
+                    } else {
+                        csvStream.write(element);
+                    }
+                }
 
-            return exportCategories(bc, path);
-        }
-
-        if (meta.current_page == meta.total_pages) {
-            category_list.forEach(category => csvStream.write(category));
-
-            csvStream.end();
+                function writeAndPublishCSV(element, index, array) {
+                    if (index == array.length - 1) {
+                        csvStream.write(element);
+                        csvStream.end()
+                    } else {
+                        csvStream.write(element);
+                    }
+                }
         }
 
         writableStream.on('finish', function(){
