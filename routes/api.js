@@ -57,18 +57,19 @@ router.get('/export', (req, res) => {
         console.log(`cat length: ${category_list.length}`);
         //csvStream.pipe(writableStream);
 
-        function determinePageForCSV(){
-                console.log(`writing page: ${meta.current_page}`);
+        function determinePageForCSV(current_categories){
+                
                 if (meta.current_page < meta.total_pages) {
-                    
+                    console.log(`writing page: ${meta.current_page}`);
                     //category_list.forEach(category => csvStream.write(category))
                     //return exportCategories(bc, path);
-                    category_list.forEach(writeToCSV);
+                    current_categories.forEach(writeToCSV);
                 }
                 if (meta.current_page == meta.total_pages) {
+                    console.log(`writing what should be the last page: ${meta.current_page}`);
                     //category_list.forEach(category => csvStream.write(category));
                     //csvStream.end();
-                    category_list.forEach(writeAndPublishCSV);
+                    current_categories.forEach(writeAndPublishCSV);
                 }
                 function writeToCSV(element, index, array){
                     //console.log(index, array.length);
@@ -85,24 +86,28 @@ router.get('/export', (req, res) => {
                 function writeAndPublishCSV(element, index, array) {
                     if (index == array.length - 1) {
                         csvStream.write(element);
-                        csvStream.end()
+                        sendCSV();
                     } else {
                         csvStream.write(element);
                     }
                 }
         }
-        determinePageForCSV();
+        determinePageForCSV(category_list);
 
-        writableStream.on('finish', function(){
-            console.log('Done with CSV');
-
-            res.download(filename, (err) => {
-            if (err) {
-                console.log(`csv send err: ${err}`)
-            }
+        function sendCSV(){
+            csvStream.end()
+            writableStream.on('finish', function(){
+                console.log('Done with CSV');
+    
+                res.download(filename, (err) => {
+                if (err) {
+                    console.log(`csv send err: ${err}`)
+                }
+                });
+    
             });
-
-        });
+        }
+        
         
     }
 
