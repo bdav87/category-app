@@ -51,10 +51,10 @@ router.get('/export', (req, res) => {
     }
 
     function streamToCSV(categories, meta){
-        console.log(categories, meta);
+        //console.log(categories, meta);
         
         const category_list = categories.map(category => Object.assign({}, category))
-        
+        console.log(`cat length: ${category_list.length}`);
         csvStream.pipe(writableStream);
 
         if (meta.current_page < meta.total_pages) {
