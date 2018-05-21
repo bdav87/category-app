@@ -12,8 +12,6 @@ document.addEventListener('DOMContentLoaded', function(){
           console.log(file.size)
           console.log(file.type)
           console.log(file.lastModifiedData)
-          console.log(file.fullPath) // not real full path due to browser security restrictions
-          console.log(file.path) // in Electron, this contains the actual full path
       
           // convert the file to a Buffer that we can use!
           var reader = new FileReader()
@@ -40,10 +38,8 @@ document.addEventListener('DOMContentLoaded', function(){
       let button = document.getElementById('export-btn');
       button.addEventListener('click', (event) => {
         event.preventDefault();
-	window.location = '/api/export';
-        /*$.get('/api/export', (data) => {
-          console.log(data);
-        })*/
+	      window.location = '/api/export';
+
       });
     }
     

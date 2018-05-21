@@ -38,11 +38,12 @@ router.get('/export', (req, res) => {
 
     let date = new Date().toDateString().split(' ').join('');
     let filename = `category-export-${date}.csv`;
-
     let csvStream = csv.createWriteStream({headers: true});
     let writableStream = fs.createWriteStream(filename);
+
+    csvStream.pipe(writableStream);
     
-    function exportCategories(bc_api, path='?page=1&limit=250') {
+    function exportCategories(bc_api, path) {
         bc_api.get(`/catalog/categories${path}`)
         .then(categories => {
             streamToCSV(categories.data, categories.meta.pagination);
@@ -51,44 +52,65 @@ router.get('/export', (req, res) => {
     }
 
     function streamToCSV(categories, meta){
-        console.log(categories, meta);
         
-        let category_list = categories.map(category => Object.assign({}, category))
-        
-        csvStream.pipe(writableStream);
+        const category_list = categories.map(category => Object.assign({}, category))
 
-        if (meta.current_page < meta.total_pages) {
-            console.log('meta.current_page < meta.total_pages');
+        function determinePageForCSV(current_categories){
+                
+                if (meta.current_page < meta.total_pages) {
+                    current_categories.forEach(writeToCSV);
+                }
+                if (meta.current_page == meta.total_pages) {
+                    current_categories.forEach(writeAndPublishCSV);
+                }
 
-            category_list.forEach(category => csvStream.write(category))
+                function writeToCSV(element, index, array){
+                    if (index == array.length - 1) {
+                        csvStream.write(element);
+                        const path = meta.links.next;
 
-            let path = meta.links.next;
-
-            return exportCategories(bc, path);
+                        exportCategories(bc, path);
+                    } else {
+                        csvStream.write(element);
+                    }
+                }
+                function writeAndPublishCSV(element, index, array) {
+                    if (index == array.length - 1) {
+                        csvStream.write(element);
+                        sendCSV();
+                    } else {
+                        csvStream.write(element);
+                    }
+                }
         }
 
-        if (meta.current_page == meta.total_pages) {
-            category_list.forEach(category => csvStream.write(category));
+        determinePageForCSV(category_list);
 
-            csvStream.end();
+        function sendCSV(){
+            csvStream.end()
+            writableStream.on('finish', function(){
+                console.log('Done with CSV');
+    
+                res.download(filename, (err) => {
+                if (err) {
+                    console.log(`csv send err: ${err}`)
+                }
+                });
+    
+            });
         }
-
-        writableStream.on('finish', function(){
-            console.log('Done with CSV');
-
-            res.download(filename, (err) => {
-            if (err) {
-                console.log(`csv send err: ${err}`)
-            }
-        });
-
-        });
+        
         
     }
 
     if (bc) {
-        exportCategories(bc);
+        exportCategories(bc, '?page=1&limit=250');
     }
 })
+
+router.post('/import', (req, res) => {
+    res.send('You are importing a file');
+})
+
 
 module.exports = router;
