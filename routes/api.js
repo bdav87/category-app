@@ -39,7 +39,7 @@ router.get('/export', (req, res) => {
     function exportCategories(bc_api, path='?page=1&limit=250') {
         bc_api.get(`/catalog/categories${path}`)
         .then(categories => {
-            streamToCSV(categories.data, meta.pagination);
+            streamToCSV(categories.data, categories.meta.pagination);
         })
         .catch(err => res.send(`Export error: ${err}.}`))
     }
