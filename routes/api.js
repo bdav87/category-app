@@ -66,7 +66,7 @@ router.get('/export', (req, res) => {
             return exportCategories(bc, path);
         }
 
-        if (category_meta.current_page == category_meta.total_pages) {
+        if (meta.current_page == meta.total_pages) {
             category_list.forEach(category => csvStream.write(category));
 
             csvStream.end();
