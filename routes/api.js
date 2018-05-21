@@ -58,10 +58,7 @@ router.get('/export', (req, res) => {
         csvStream.pipe(writableStream);
 
         if (meta.current_page < meta.total_pages) {
-            console.log('meta.current_page < meta.total_pages');
-
             category_list.forEach(category => csvStream.write(category))
-
             let path = meta.links.next;
 
             return exportCategories(bc, path);
@@ -80,7 +77,7 @@ router.get('/export', (req, res) => {
             if (err) {
                 console.log(`csv send err: ${err}`)
             }
-        });
+            });
 
         });
         
@@ -90,5 +87,10 @@ router.get('/export', (req, res) => {
         exportCategories(bc);
     }
 })
+
+router.post('/import', (req, res) => {
+    res.send('You are importing a file');
+})
+
 
 module.exports = router;
