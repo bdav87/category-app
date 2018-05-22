@@ -111,12 +111,20 @@ router.get('/export', (req, res) => {
 })
 
 router.post('/import', upload.single('csvFile'), (req, res) => {
-    console.log('format of data: ', req.get('content-type'));
     console.log('file? ', req.file);
-    console.log('file(s)? ', req.files);
-    console.log('body? ', req.body);
-    
-    (req.file) ? res.send(req.file.name) : res.send('no file detected')
+    var stream = fs.createReadStream(req.file);
+ 
+    var csvStream = csv()
+    .on("data", function(data){
+         console.log(data);
+    })
+    .on("end", function(){
+         console.log("done");
+    });
+ 
+    stream.pipe(csvStream);
+
+    (req.file) ? res.send(`File: ${req.file.originalname} uploaded`) : res.send('no file detected')
     
     
 })
