@@ -111,6 +111,7 @@ router.get('/export', (req, res) => {
 })
 
 router.post('/import', upload.single('csvFile'), (req, res) => {
+    console.log('multer?', upload);
     console.log('file? ', req.file);
     console.log('file(s)? ', req.files);
     console.log('body? ', req.body);
