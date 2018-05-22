@@ -51,3 +51,33 @@ nav {
 #main-container {
   padding: 20px 48px 0;
 }
+
+#resultsArea {
+  display: none;
+}
+
+#importButtonArea {
+  display: none;
+}
+
+#fileSelect {
+  width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+#fileLabel {
+  color: #4b71fc;
+  font-weight: 600;
+}
+
+#fileLabel:hover {
+  border-bottom: 1px #4b71fc solid;
+}
+
+#fileUploadForm {
+  text-align: center;
+}

@@ -1,8 +1,35 @@
 <h3>Import Categories</h3>
 <div class='row'>
+
     <div class='col mx-4' id='dropTarget'>
-    <strong><p>Drag & Drop your CSV file here</p></strong>
-    <p>or</p>
-    <a href='#'>Click here to upload</a>
+
+        <form id='fileUploadForm'>
+
+        <div id='dropInstructions'>
+            <strong><p>Drag & Drop your CSV file here</p></strong>
+            <p>or</p> 
+        
+
+            <div class='form-group'>
+            <label for='fileSelect' id='fileLabel'>Click here to upload</label>
+            <input type='file' id='fileSelect' accept='text/csv'/> 
+            </div>
+        </div>
+
+        <div id='importButtonArea'>
+            <button type='submit' id='importButton' class='btn btn-primary'>Import your CSV</button>
+        </div>
+    
+    
+        </form>
+
+
+    </div>
+
+    
+</div>
+<div class='row'>
+    <div class='col' id='resultsArea'>
+        Results
     </div>
 </div>
