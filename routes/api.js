@@ -6,6 +6,8 @@ const bcAuth = require('../lib/bc_auth');
 const csv = require('fast-csv');
 const fs = require('fs');
 const path = require('path');
+const multer = require('multer');
+const upload = multer();
 
 let bc;
 
@@ -108,8 +110,8 @@ router.get('/export', (req, res) => {
     }
 })
 
-router.post('/import', (req, res) => {
-    console.log(req.body);
+router.post('/import', upload.single('csv'), (req, res) => {
+    console.log('did a file appear: ', csv);
     res.send('You are importing a file');
 })
 
