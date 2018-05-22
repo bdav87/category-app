@@ -111,7 +111,7 @@ router.get('/export', (req, res) => {
 })
 
 router.post('/import', upload.single('csvFile'), (req, res) => {
-    
+    console.log('format of data: ', req.get('content-type'));
     console.log('file? ', req.file);
     console.log('file(s)? ', req.files);
     console.log('body? ', req.body);
