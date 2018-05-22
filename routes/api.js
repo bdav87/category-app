@@ -112,7 +112,9 @@ router.get('/export', (req, res) => {
 
 router.post('/import', upload.single('csvFile'), (req, res) => {
     console.log('file? ', req.file);
-    res.send(req.file.name);
+    console.log('body? ', req.body);
+    (req.file) ? res.send(req.file.name) : res.send('no file detected')
+    
     
 })
 
