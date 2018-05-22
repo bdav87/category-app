@@ -37,11 +37,6 @@ document.addEventListener('DOMContentLoaded', function(){
         $('#resultsArea').show().text(file.name);
         console.log('Submitting this file',file.values().next().value);
 
-        /*
-        const file_to_send = new FormData();
-        file_to_send.append('csvData', file);
-        console.log(file_to_send);
-        */
         $.ajax({
           url: '/api/import',
           method: 'POST',
@@ -49,7 +44,10 @@ document.addEventListener('DOMContentLoaded', function(){
           processData: false,
           contentType: false
         })
-        .done(data => console.log(data))
+        .done(data => {
+          fileForm.reset();
+          console.log(data);
+        })
         .fail(err => console.log(err.responseText))
       }
 
