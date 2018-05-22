@@ -123,7 +123,14 @@ router.post('/import', (req, res) => {
     let data = '';
     let reader = fs.createReadStream(req.body);
     reader.on('data', chunk => data += chunk);
-    reader.on('end', ()=> res.send(data));
+    reader.on('end', () => {
+        try{
+            res.send(data);
+        } catch(err){
+            res.send(err);
+        }
+        
+    });
     
 })
 
