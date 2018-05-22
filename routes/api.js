@@ -109,6 +109,7 @@ router.get('/export', (req, res) => {
 })
 
 router.post('/import', (req, res) => {
+    console.log(req.body);
     res.send('You are importing a file');
 })
 
