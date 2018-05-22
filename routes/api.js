@@ -111,8 +111,9 @@ router.get('/export', (req, res) => {
 })
 
 router.post('/import', upload.single('csv'), (req, res) => {
-    console.log('did a file appear: ', csv.files);
-    console.log('check req: ', req.file);
+    console.log('did a file appear: ', csv);
+    console.log('check req file: ', req.file);
+    console.log('check req body: ', req.body);
     res.send('You are importing a file');
 })
 
