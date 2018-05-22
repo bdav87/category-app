@@ -115,6 +115,7 @@ router.post('/import', upload.single(), (req, res) => {
     console.log('file? ', req.file);
     console.log('file(s)? ', req.files);
     console.log('body? ', req.body);
+    console.log('what is req even: ', req);
     (req.file) ? res.send(req.file.name) : res.send('no file detected')
     
     
