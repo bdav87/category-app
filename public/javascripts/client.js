@@ -1,41 +1,59 @@
 document.addEventListener('DOMContentLoaded', function(){
 
-    if (document.getElementById('dropTarget')){
-      DragDrop('#dropTarget', function (files, pos, fileList) {
-        console.log('Here are the dropped files', files)
-        console.log('Dropped at coordinates', pos.x, pos.y)
-        console.log('Here is the raw FileList object if you need it:', fileList)
-      
-        // `files` is an Array!
-        files.forEach(function (file) {
-          console.log(file.name)
-          console.log(file.size)
-          console.log(file.type)
-          console.log(file.lastModifiedData)
-      
-          // convert the file to a Buffer that we can use!
-          var reader = new FileReader()
-          reader.addEventListener('load', function (e) {
-            // e.target.result is an ArrayBuffer
-            var arr = new Uint8Array(e.target.result)
-            var buffer = new Buffer(arr)
-      
-            // do something with the buffer!
-          })
-          reader.addEventListener('error', function (err) {
-            console.error('FileReader error' + err)
-          })
-          reader.readAsArrayBuffer(file)
-        })
-      })
-    }
+    //Prepare the import area when it is present.
+    if (document.getElementById('dropTarget')) {
+      const fileForm = $('#fileUploadForm');
+      const fileInputElement = $('#fileSelect');
 
-    if(document.getElementById('export-btn')) {
+      function initDragDrop(){
+        DragDrop('#dropTarget', files => prepareFileData(files[0]))
+      }
+      initDragDrop()
+
+      fileInputElement.change((event)=> {
+        let csv_to_send = event.target.files[0];
+        readyImportButton(fileForm, csv_to_send);
+      })
+
+      function readyImportButton(form, csv) {
+        $('#importButtonArea').show();
+        $('#dropInstructions').hide()
+        form.submit((event) => {
+          event.preventDefault();
+          uploadFile(csv);
+        })
+      }
+      
+      function prepareFileData(file_data){
+          return readyImportButton(fileForm, file_data);
+      }
+
+      function uploadFile(file) {
+        $('#dropInstructions').show()
+        $('#importButtonArea').hide();
+        $('#resultsArea').show().text(file.name);
+        console.log('Submitting this file',file);
+
+        const file_to_send = new FormData().append('csvData', file);
+
+        $.ajax({
+          url: '/api/import',
+          method: 'POST',
+          data: file_to_send,
+          processData: false
+        })
+        .done(data => console.log(data))
+      }
+
+    }
+    
+    //Prepare the export area when it is present
+    if(document.getElementById('exportBtn')) {
       prepExportbutton();
     }
     
     function prepExportbutton(){
-      let button = document.getElementById('export-btn');
+      let button = document.getElementById('exportBtn');
       button.addEventListener('click', (event) => {
         event.preventDefault();
 	      window.location = '/api/export';
