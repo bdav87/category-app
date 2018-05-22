@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function(){
           contentType: false
         })
         .done(data => {
-          fileForm.reset();
+          document.getElementById('fileUploadForm').reset();
           console.log(data);
         })
         .fail(err => console.log(err.responseText))
