@@ -110,28 +110,9 @@ router.get('/export', (req, res) => {
     }
 })
 
-router.post('/import', (req, res) => {
-    //console.log('check req file: ', req.file);
-    console.log('check req body: ', req.body);
-    /*
-    let stream = fs.createReadStream(req.body);
-    let csvStream = csv()
-        .on('data', data=> console.log(data))
-        .on('end', ()=> console.log('done with csv stream'));
-    stream.pipe(csvStream)
-    */
-    let data = '';
-    let file = req.body;
-    let reader = fs.createReadStream(file);
-    reader.on('data', chunk => data += chunk);
-    reader.on('end', () => {
-        try{
-            res.send(`${data}`);
-        } catch(err){
-            res.send(`${err}`);
-        }
-        
-    });
+router.post('/import', upload.single('csvFile'), (req, res) => {
+    console.log('file? ', req.file);
+    res.send(req.file.name);
     
 })
 
