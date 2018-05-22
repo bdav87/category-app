@@ -113,7 +113,13 @@ router.get('/export', (req, res) => {
 router.post('/import', (req, res) => {
     //console.log('check req file: ', req.file);
     console.log('check req body: ', req.body);
-    res.send('You are importing a file');
+    let stream = fs.createReadStream(req.body);
+    let csvStream = csv()
+        .on('data', data=> console.log(data))
+        .on('end', ()=> res.send('You are importing a file'));
+    stream.pipe(csvStream)
+
+    //res.send('You are importing a file');
 })
 
 
