@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function(){
           event.preventDefault();
           let file_to_send = new FormData();
           file_to_send.append('csvFile', csv);
-          uploadFile(file_to_send);
+          uploadFile(csv);
         })
       }
       
