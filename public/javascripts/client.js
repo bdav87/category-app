@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function(){
           method: 'POST',
           data: file,
           processData: false,
-          contentType: 'multipart/form-data'
+          contentType: 'false'
         })
         .done(data => console.log(data))
         .fail(err => console.log(err.responseText))
