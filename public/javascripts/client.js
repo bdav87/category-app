@@ -41,7 +41,8 @@ document.addEventListener('DOMContentLoaded', function(){
           url: '/api/import',
           method: 'POST',
           data: file_to_send,
-          processData: false
+          processData: false,
+          contentType: 'multipart/form-data'
         })
         .done(data => console.log(data))
       }
