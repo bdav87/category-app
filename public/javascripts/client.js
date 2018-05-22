@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function(){
           event.preventDefault();
           let file_to_send = new FormData();
           file_to_send.append('csvFile', csv);
-          uploadFile(csv);
+          uploadFile(file_to_send);
         })
       }
       
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function(){
           processData: false
         })
         .done(data => console.log(data))
-        .fail(err => console.log(err))
+        .fail(err => console.log(err.responseText))
       }
 
     }
