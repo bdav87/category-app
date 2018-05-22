@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function(){
         $('#dropInstructions').show()
         $('#importButtonArea').hide();
         $('#resultsArea').show().text(file.name);
-        console.log('Submitting this file',file);
+        console.log('Submitting this file',file.values().next().value);
 
         /*
         const file_to_send = new FormData();
