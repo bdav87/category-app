@@ -110,8 +110,8 @@ router.get('/export', (req, res) => {
     }
 })
 
-router.post('/import', upload.single('csvFile'), (req, res) => {
-    console.log('check req file: ', req.file);
+router.post('/import', (req, res) => {
+    //console.log('check req file: ', req.file);
     console.log('check req body: ', req.body);
     res.send('You are importing a file');
 })
