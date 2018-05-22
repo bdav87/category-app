@@ -121,7 +121,8 @@ router.post('/import', (req, res) => {
     stream.pipe(csvStream)
     */
     let data = '';
-    let reader = fs.createReadStream(req.body);
+    let file = req.body;
+    let reader = fs.createReadStream(file);
     reader.on('data', chunk => data += chunk);
     reader.on('end', () => {
         try{
