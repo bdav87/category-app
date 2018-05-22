@@ -20,7 +20,9 @@ document.addEventListener('DOMContentLoaded', function(){
         $('#dropInstructions').hide()
         form.submit((event) => {
           event.preventDefault();
-          uploadFile(csv);
+          let file_to_send = new FormData();
+          file_to_send.append('csvData', csv);
+          uploadFile(file_to_send);
         })
       }
       
