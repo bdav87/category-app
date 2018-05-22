@@ -34,7 +34,8 @@ document.addEventListener('DOMContentLoaded', function(){
         $('#resultsArea').show().text(file.name);
         console.log('Submitting this file',file);
 
-        const file_to_send = new FormData().append('csvData', file);
+        const file_to_send = new FormData();
+        file_to_send.append('csvData', file);
         console.log(file_to_send);
         $.ajax({
           url: '/api/import',
