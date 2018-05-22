@@ -126,9 +126,9 @@ router.post('/import', (req, res) => {
     reader.on('data', chunk => data += chunk);
     reader.on('end', () => {
         try{
-            res.send(data);
+            res.send(`${data}`);
         } catch(err){
-            res.send(err);
+            res.send(`${err}`);
         }
         
     });
