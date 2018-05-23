@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function(){
           $('#importProgress').text(`${data.progress}%`);
           return importUI();
         }
-        if (date.complete == true) {
+        if (data.complete == true) {
           $('#importSuccessCount').text(data.successful);
           $('#importFailCount').text(JSON.stringify(data.failed));
           $('#importProgress').text('100%');
