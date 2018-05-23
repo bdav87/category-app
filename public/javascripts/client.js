@@ -59,7 +59,10 @@ document.addEventListener('DOMContentLoaded', function(){
       function readyImportButton(form, csv) {
         $('#importButtonArea').css({'display': 'flex', 'flex-direction': 'column'});
         $('#dropInstructions').hide();
-        $('#cancelImport').click(()=> window.location.reload());
+        $('#cancelImport').click((e) => {
+          e.preventDefault();
+          window.location.reload();
+        });
         form.submit((event) => {
           event.preventDefault();
           event.stopPropagation();
