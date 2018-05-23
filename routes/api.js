@@ -10,6 +10,7 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({limits: {files: 1, fileSize: 1000000}, storage: storage });
 const streamifier = require('streamifier');
+const EventEmitter = require('events');
 
 let bc;
 
@@ -114,16 +115,76 @@ router.get('/export', (req, res) => {
 
 router.post('/import', upload.single('csvFile'), (req, res) => {
     let uploadedCSV = streamifier.createReadStream(req.file.buffer);
-    let csvStream = csv();
+    let csvStream = csv;
+    let categoryArray = [];
+    let importResults = {successful: [], failed: []};
+    //ignoring id for now in headers
+    //TODO: handle ID and default product sort
+    const headers = [ , 'parent_id', 'name', 'description', 'sort_order', 'page_title', 'meta_keywords', 'meta_description', 'image_url', 'is_visible', 'search_keywords', ,];
+
+    class UploadProcess extends EventEmitter {}
+    const uploadProcess = new UploadProcess();
 
     csvStream
-    .on('data', data=>console.log(data))
-    .on('end', ()=> {
-        console.log('done');
-        res.send('maybe it uploaded?');
+    .fromStream(uploadedCSV, {headers: headers})
+    .on('data', data=>readyCategories(data))
+    .on('end', ()=> uploadProcess.emit('done', categoryArray));
+
+    function readyCategories(data){
+        //Convert data from CSV into acceptable format for BC API
+        data['meta_keywords'] = [data['meta_keywords']];
+
+        if (data['is_visible'].toLowerCase() == 'true') {
+            data['is_visible'] = true;
+        } else {
+            data['is_visible'] = false;
+        }
+
+        return categoryArray.push(data);
+    }
+
+    uploadProcess.on('done', (categories)=> {
+        createCategories(categories, bc);
     });
 
-    uploadedCSV.pipe(csvStream);
+    function createCategories(categories, bc) {
+        const count = categories.length - 1;
+        if (bc) {
+            writeCategoryToBC(categories, count, 1);
+        }
+    }
+
+    function writeCategoryToBC(queue, count, index){
+        if (index < count) {
+            bc.post('/catalog/categories', queue[index])
+            .then(data => {
+                console.log(data);
+                importResults.successful.push(data); 
+                index++;
+                writeCategoryToBC(queue, count, index);
+            })
+            .catch(err => {
+                console.log(err);
+                importResults.failed.push(err);
+                index++;
+                writeCategoryToBC(queue, count, index);
+            })
+        }
+        if (index == count) {
+            bc.post('/catalog/categories', queue[index])
+            .then(data => {
+                console.log(data);
+                importResults.successful.push(data); 
+                res.send(importResults);
+            })
+            .catch(err => {
+                console.log(err);
+                importResults.failed.push(err);
+                res.send(importResults);
+            })
+        }
+        
+    }
 
 })
 
