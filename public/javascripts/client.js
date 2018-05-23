@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', function(){
       if (!data.started) {
         $('#dropTarget').css({display: 'flex'});
         $('#importProgressArea').hide();
-      } else {
+      } 
+      if (data.started) {
         $('#dropTarget').hide();
         $('#importProgressArea').show();
         return importUI();
@@ -27,7 +28,15 @@ document.addEventListener('DOMContentLoaded', function(){
           $('#importFailCount').text(data.failed);
           $('#importProgress').text('100%');
           $('#progressHeading').text('Completed');
-          $('#restartLink').show().click(()=> window.location.reload());
+          $('#restartLink').show().click(() => {
+            $.get('/api/restart', (data) => {
+              if (data.acknowledged) {
+                window.location.reload();
+              } else {
+                alert('Server not responding')
+              }
+            })
+          });
         }
       })
     }

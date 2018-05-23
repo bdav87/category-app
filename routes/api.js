@@ -125,7 +125,8 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
         failed: 0, 
         complete: false, 
         started: true,
-        progress: 0
+        progress: 0,
+        acknowledged: false
     };
     //ignoring id for now in headers
     //TODO: handle ID and default product sort
@@ -186,13 +187,11 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
             .then(data => {
                 importResults.successful++; 
                 importResults.complete = true;
-                importResults.started = false;
             })
             .catch(err => {
                 console.log(err);
                 importResults.failed++;
-                importResults.complete = true; 
-                importResults.started = false;               
+                importResults.complete = true;          
             })
         }
         
@@ -203,6 +202,11 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 //A route to poll the progress of the import
 router.get('/progress', (req, res) => {
     res.send(importResults);
+})
+
+router.get('/restart', (req, res) => {
+    importResults.started = false;
+    res.send({"acknowledged": true})
 })
 
 
