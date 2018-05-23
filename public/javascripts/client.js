@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function(){
           swapUI(data);
         })
         .fail(err => {
-          alert(err);
+          alert(JSON.stringify(err));
           window.location.reload();
         }))
       }
