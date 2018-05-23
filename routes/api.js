@@ -119,7 +119,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     let categoryArray = [];
     //ignoring id for now in headers
     //TODO: handle ID to update existing categories.
-    const headers = [ , 'parent_id', 'name', 'description', 'sort_order', 'page_title', 'meta_keywords', 'meta_description', 'image_url', 'is_visible', 'search_keywords', 'default_product_sort'];
+    const headers = [ , 'parent_id', 'name', 'description', 'sort_order', 'page_title', 'meta_keywords', 'meta_description', 'image_url', 'is_visible', 'search_keywords', ];
 
     class UploadProcess extends EventEmitter {}
     const uploadProcess = new UploadProcess();
@@ -130,13 +130,20 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     .on('end', ()=> uploadProcess.emit('done', categoryArray));
 
     function readyCategories(data){
+        //Convert data from CSV into acceptable format for BC API
+        data['meta_keywords'] = [data['meta_keywords']];
+
+        if (data['is_visible'].toLowerCase() == 'true') {
+            data['is_visible'] = true;
+        } else {
+            data['is_visible'] = false;
+        }
+
         return categoryArray.push(data);
     }
 
     uploadProcess.on('done', (categories)=> {
         createCategories(categories, bc);
-        //console.log('Processed categories: ', categories);
-        //res.send(categories);
     });
 
     function createCategories(categories, bc) {
@@ -145,16 +152,16 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
         }
     }
 
-    function writeCategoryToBC(element, index, array){
+    function writeCategoryToBC(category, index, array){
         if (index == array.length - 1) {
-            bc.post('/catalog/categories', element)
+            bc.post('/catalog/categories', category)
             .then(data => {
                 console.log(data);
                 res.send('Categories imported!!!')
             })
             .catch(err => console.log('Create final category error: ', err))
         } else {
-            bc.post('/catalog/categories', element)
+            bc.post('/catalog/categories', category)
             .then(data => console.log(data))
             .catch(err => console.log('Create category error: ', err))
         }
