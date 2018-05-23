@@ -60,6 +60,10 @@ nav {
   display: none;
 }
 
+#importButton {
+  margin: 128px 0;
+}
+
 #fileSelect {
   width: 0.1px;
 	height: 0.1px;
