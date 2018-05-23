@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function(){
       }
 
       function uploadFile(file) {
-        $('#dropTarget').hide();
+        $('.dropzone').hide();
         $('#importButtonArea').hide();
         $('#importAlert').text('Import started, please wait...').show();
 
