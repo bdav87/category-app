@@ -6,25 +6,25 @@ document.addEventListener('DOMContentLoaded', function(){
       const fileInputElement = $('#fileSelect');
 
       function initDragDrop(){
-        DragDrop('#dropTarget', files => prepareFileData(files[0]))
+        return DragDrop('#dropTarget', files => prepareFileData(files[0]))
       }
       initDragDrop()
 
       fileInputElement.change((event)=> {
         let csv_to_send = event.target.files[0];
-        readyImportButton(fileForm, csv_to_send);
+        return readyImportButton(fileForm, csv_to_send);
       })
 
       function readyImportButton(form, csv) {
         $('#importButtonArea').show();
-        $('#dropInstructions').hide()
+        $('#dropInstructions').hide();
         form.submit((event) => {
           event.preventDefault();
           event.stopPropagation();
           let file_to_send = new FormData();
           file_to_send.append('csvFile', csv);
-          uploadFile(file_to_send);
-        })
+          return uploadFile(file_to_send);
+        });
       }
       
       function prepareFileData(file_data){
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function(){
       }
 
       function uploadFile(file) {
-        $('#dropInstructions').show()
+        $('#dropInstructions').show();
         $('#importButtonArea').hide();
         $('#resultsArea').show().text(file.name);
         console.log('Submitting this file',file.values().next().value);
@@ -46,13 +46,10 @@ document.addEventListener('DOMContentLoaded', function(){
           contentType: false
         })
         .done(data => {
-          document.getElementById('fileUploadForm').reset();
-          console.log(data);
-          console.log(fileInputElement.val())
+          return console.log(data);
         })
         .fail(err => {
-          document.getElementById('fileUploadForm').reset();
-          console.log(err.responseText)
+          return console.log(err.responseText);
         }))
       }
 
@@ -60,14 +57,14 @@ document.addEventListener('DOMContentLoaded', function(){
     
     //Prepare the export area when it is present
     if(document.getElementById('exportBtn')) {
-      prepExportbutton();
+      return prepExportbutton();
     }
     
     function prepExportbutton(){
       let button = document.getElementById('exportBtn');
       button.addEventListener('click', (event) => {
         event.preventDefault();
-	      window.location = '/api/export';
+	      return window.location = '/api/export';
 
       });
     }
