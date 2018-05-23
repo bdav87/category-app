@@ -137,7 +137,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 
     csvStream
     .fromStream(uploadedCSV, {headers: headers})
-    .on('error', err => res.status('400').send({'error': 'CSV is not in expected format'}))
+    .on('error', err => res.status('400').send('Error: CSV is not in expected format\nCheck instructions for format help.'))
     .on('data', data=>readyCategories(data))
     .on('end', ()=> uploadProcess.emit('done', categoryArray));
 
