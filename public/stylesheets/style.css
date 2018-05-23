@@ -85,6 +85,7 @@ nav {
 #importProgressArea {
   display: none;
   background: #FFF;
+  border: 1px solid #e4e7ed;
   color: #000;
   min-height: 400px;
 }

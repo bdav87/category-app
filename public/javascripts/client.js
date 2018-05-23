@@ -64,11 +64,9 @@ document.addEventListener('DOMContentLoaded', function(){
       }
 
       function uploadFile(file) {
-        $('#dropInstructions').hide();
+        $('#dropTarget').hide();
         $('#importButtonArea').hide();
         $('#importAlert').text('Import started, please wait...').show();
-
-        console.log('Submitting this file',file.values().next().value);
 
         return (
           $.ajax({
@@ -108,6 +106,10 @@ document.addEventListener('DOMContentLoaded', function(){
 	      return window.location = '/api/export';
 
       });
+    }
+
+    if(document.getElementById('restartLink')) {
+      $('#restartLink').click(() => window.location.reload());
     }
     
 })
