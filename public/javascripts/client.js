@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     function importUI(){
-      setTimeout(pollProgress, 2000);
+      setTimeout(pollProgress, 1000);
     }
 
     function pollProgress(){
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function(){
           $('#importFailCount').text(data.failed);
           $('#importProgress').text('100%');
           $('#progressHeading').text('Completed');
-          $('#restartLink').show();
+          $('#restartLink').show().click(()=> window.location.reload());
         }
       })
     }
@@ -108,8 +108,5 @@ document.addEventListener('DOMContentLoaded', function(){
       });
     }
 
-    if(document.getElementById('restartLink')) {
-      $('#restartLink').click(() => window.location.reload());
-    }
     
 })
