@@ -137,6 +137,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 
     csvStream
     .fromStream(uploadedCSV, {headers: headers})
+    .on('error', err => res.send({'error': err}))
     .on('data', data=>readyCategories(data))
     .on('end', ()=> uploadProcess.emit('done', categoryArray));
 
