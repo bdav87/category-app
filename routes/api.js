@@ -124,7 +124,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
         res.send('maybe it uploaded?');
     });
 
-    uploadedCSV.pipe(csvStream);
+    //uploadedCSV.pipe(csvStream);
 
 })
 
