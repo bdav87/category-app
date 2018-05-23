@@ -139,22 +139,22 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
         //res.send(categories);
     });
 
-    function createCategories(categories, bc_api) {
-        if (bc_api) {
+    function createCategories(categories, bc) {
+        if (bc) {
             categories.forEach(writeCategoryToBC);
         }
     }
 
     function writeCategoryToBC(element, index, array){
         if (index == array.length - 1) {
-            bc_api.post('/catalog/categories', element)
+            bc.post('/catalog/categories', element)
             .then(data => {
                 console.log(data);
                 res.send('Categories imported!!!')
             })
             .catch(err => console.log('Create final category error: ', err))
         } else {
-            bc_api.post('/catalog/categories', element)
+            bc.post('/catalog/categories', element)
             .then(data => console.log(data))
             .catch(err => console.log('Create category error: ', err))
         }
