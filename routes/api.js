@@ -117,6 +117,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     let uploadedCSV = streamifier.createReadStream(req.file.buffer);
     let csvStream = csv;
     let categoryArray = [];
+    let importResults = {successful: [], failed: []};
     //ignoring id for now in headers
     //TODO: handle ID and default product sort
     const headers = [ , 'parent_id', 'name', 'description', 'sort_order', 'page_title', 'meta_keywords', 'meta_description', 'image_url', 'is_visible', 'search_keywords', ,];
@@ -147,24 +148,39 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     });
 
     function createCategories(categories, bc) {
+        const count = categories.length;
         if (bc) {
-            categories.forEach(writeCategoryToBC);
+            writeCategoryToBC(categories, count, 0);
         }
     }
 
-    function writeCategoryToBC(category, index, array){
-        if (index == array.length - 1) {
-            bc.post('/catalog/categories', category)
+    function writeCategoryToBC(queue, count, index){
+        if (index < count) {
+            bc.post('catalog/categories', queue[index])
             .then(data => {
                 console.log(data);
-                res.send('Categories imported!!!')
+                importResults.successful.push(data); 
+                writeCategoryToBC(queue, count, index++)
             })
-            .catch(err => console.log('Create final category error: ', err))
-        } else {
-            bc.post('/catalog/categories', category)
-            .then(data => console.log(data))
-            .catch(err => console.log('Create category error: ', err))
+            .catch(err => {
+                console.log(err);
+                importResults.failed.push(err);
+            })
         }
+        if (index == count) {
+            bc.post('catalog/categories', queue[index])
+            .then(data => {
+                console.log(data);
+                importResults.successful.push(data); 
+                res.send(importResults);
+            })
+            .catch(err => {
+                console.log(err);
+                importResults.failed.push(err);
+                res.send(importResults);
+            })
+        }
+        
     }
 
 })
