@@ -173,7 +173,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
                 writeCategoryToBC(queue, count, index);
             })
         }
-        if (index == count) {
+        if (index == count - 1) {
             console.log('index: ', index);
             console.log('count: ', count);
             console.log('current category: ', queue[index]);
