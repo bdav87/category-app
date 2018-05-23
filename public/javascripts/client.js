@@ -16,13 +16,13 @@ document.addEventListener('DOMContentLoaded', function(){
 
     function pollProgress(){
       $.get('/api/progress', (data) => {
-        if (data.started && data.complete == false) {
+        if (data.complete == false) {
           $('#importSuccessCount').text(data.successful);
           $('#importFailCount').text(JSON.stringify(data.failed));
           $('#importProgress').text(`${data.progress}%`);
           return importUI();
         }
-        if (data.started && date.complete == true) {
+        if (date.complete == true) {
           $('#importSuccessCount').text(data.successful);
           $('#importFailCount').text(JSON.stringify(data.failed));
           $('#importProgress').text('100%');
