@@ -156,9 +156,6 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 
     function writeCategoryToBC(queue, count, index){
         if (index < count) {
-            console.log('index: ', index);
-            console.log('count: ', count);
-            console.log('current category: ', queue[index]);
             bc.post('/catalog/categories', queue[index])
             .then(data => {
                 console.log(data);
@@ -174,9 +171,6 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
             })
         }
         if (index == count) {
-            console.log('index: ', index);
-            console.log('count: ', count);
-            console.log('current category: ', queue[index]);
             bc.post('/catalog/categories', queue[index])
             .then(data => {
                 console.log(data);
