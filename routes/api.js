@@ -7,8 +7,17 @@ const csv = require('fast-csv');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
-const upload = multer({files: 1, fileSize: 1000000, storage: storage});
 const { finished } = require('stream');
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, '/tmp/my-uploads')
+    },
+    filename: function (req, file, cb) {
+      cb(null, 'nodetemp.csv')
+    }
+  })
+
+var upload = multer({files: 1, fileSize: 1000000, storage: storage});
 
 let bc;
 
@@ -112,14 +121,7 @@ router.get('/export', (req, res) => {
 })
 
 router.post('/import', upload.single('csvFile'), (req, res) => {
-    var storage = multer.diskStorage({
-        destination: function (req, file, cb) {
-          cb(null, '/tmp/my-uploads')
-        },
-        filename: function (req, file, cb) {
-          cb(null, 'nodetemp.csv')
-        }
-      })
+    
     
     //let tempCSV = fs.createWriteStream('/tmp/my-uploads/nodetemp.csv');
     //let stream = fs.createReadStream(req.file.buffer);
