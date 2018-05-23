@@ -113,11 +113,21 @@ router.get('/export', (req, res) => {
     }
 })
 
+//Import a CSV and create categories
+let importResults = {started: false};
 router.post('/import', upload.single('csvFile'), (req, res) => {
     let uploadedCSV = streamifier.createReadStream(req.file.buffer);
     let csvStream = csv;
     let categoryArray = [];
-    let importResults = {successful: [], failed: []};
+
+    importResults = {
+        successful: 0, 
+        failed: 0, 
+        complete: false, 
+        started: true,
+        progress: 0,
+        acknowledged: false
+    };
     //ignoring id for now in headers
     //TODO: handle ID and default product sort
     const headers = [ , 'parent_id', 'name', 'description', 'sort_order', 'page_title', 'meta_keywords', 'meta_description', 'image_url', 'is_visible', 'search_keywords', ,];
@@ -127,6 +137,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 
     csvStream
     .fromStream(uploadedCSV, {headers: headers})
+    .on('error', err => res.status('400').send('Error: CSV is not in expected format\nCheck instructions for format help.'))
     .on('data', data=>readyCategories(data))
     .on('end', ()=> uploadProcess.emit('done', categoryArray));
 
@@ -150,6 +161,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     function createCategories(categories, bc) {
         const count = categories.length - 1;
         if (bc) {
+            res.send({"import": "started"});
             writeCategoryToBC(categories, count, 1);
         }
     }
@@ -158,14 +170,15 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
         if (index < count) {
             bc.post('/catalog/categories', queue[index])
             .then(data => {
-                console.log(data);
-                importResults.successful.push(data); 
+                importResults.successful++; 
+                importResults.progress = Math.round(index / count * 100);
                 index++;
                 writeCategoryToBC(queue, count, index);
             })
             .catch(err => {
                 console.log(err);
-                importResults.failed.push(err);
+                importResults.failed++;
+                importResults.progress = Math.round(index / count * 100);
                 index++;
                 writeCategoryToBC(queue, count, index);
             })
@@ -173,19 +186,28 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
         if (index == count) {
             bc.post('/catalog/categories', queue[index])
             .then(data => {
-                console.log(data);
-                importResults.successful.push(data); 
-                res.send(importResults);
+                importResults.successful++; 
+                importResults.complete = true;
             })
             .catch(err => {
                 console.log(err);
-                importResults.failed.push(err);
-                res.send(importResults);
+                importResults.failed++;
+                importResults.complete = true;          
             })
         }
         
     }
 
+})
+
+//A route to poll the progress of the import
+router.get('/progress', (req, res) => {
+    res.send(importResults);
+})
+
+router.get('/restart', (req, res) => {
+    importResults.started = false;
+    res.send({"acknowledged": true})
 })
 
 

@@ -1,4 +1,45 @@
 document.addEventListener('DOMContentLoaded', function(){
+    $.get('/api/progress', (data) => {
+      if (!data.started) {
+        $('#dropTarget').css({display: 'flex'});
+        $('#importProgressArea').hide();
+      } 
+      if (data.started) {
+        $('#dropTarget').hide();
+        $('#importProgressArea').show();
+        return importUI();
+      }
+    });
+
+    function importUI(){
+      setTimeout(pollProgress, 1000);
+    }
+
+    function pollProgress(){
+      $.get('/api/progress', (data) => {
+        if (data.complete == false) {
+          $('#importSuccessCount').text(data.successful);
+          $('#importFailCount').text(data.failed);
+          $('#importProgress').text(`${data.progress}%`);
+          return importUI();
+        }
+        if (data.complete == true) {
+          $('#importSuccessCount').text(data.successful);
+          $('#importFailCount').text(data.failed);
+          $('#importProgress').text('100%');
+          $('#progressHeading').text('Completed');
+          $('#restartLink').show().click(() => {
+            $.get('/api/restart', (data) => {
+              if (data.acknowledged) {
+                window.location.reload();
+              } else {
+                alert('Server not responding')
+              }
+            })
+          });
+        }
+      })
+    }
 
     //Prepare the import area when it is present.
     if (document.getElementById('dropTarget')) {
@@ -16,8 +57,13 @@ document.addEventListener('DOMContentLoaded', function(){
       })
 
       function readyImportButton(form, csv) {
-        $('#importButtonArea').show();
+        $('#dropTarget').removeAttr('id');
+        $('#importButtonArea').css({'display': 'flex', 'flex-direction': 'column'});
         $('#dropInstructions').hide();
+        $('#cancelImport').click((e) => {
+          e.preventDefault();
+          window.location.reload();
+        });
         form.submit((event) => {
           event.preventDefault();
           event.stopPropagation();
@@ -32,10 +78,9 @@ document.addEventListener('DOMContentLoaded', function(){
       }
 
       function uploadFile(file) {
-        $('#dropInstructions').show();
+        $('.dropzone').hide();
         $('#importButtonArea').hide();
-        $('#resultsArea').show().text(file.name);
-        console.log('Submitting this file',file.values().next().value);
+        $('#importAlert').text('Import started, please wait...').show();
 
         return (
           $.ajax({
@@ -45,10 +90,21 @@ document.addEventListener('DOMContentLoaded', function(){
           processData: false,
           contentType: false
         })
-        .done(() => window.location.reload())
+        .done((data) => {
+          swapUI(data);
+        })
         .fail(err => {
-          return console.log(err.responseText);
+          alert(err.responseText);
+          window.location.reload();
         }))
+      }
+
+      function swapUI(data) {
+        if (data['import'] == "started"){
+          window.location.reload();
+        } else {
+          console.log(data);
+        }
       }
 
     }
@@ -66,5 +122,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
       });
     }
+
     
 })
