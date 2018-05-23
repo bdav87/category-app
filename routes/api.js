@@ -160,11 +160,12 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
             .then(data => {
                 console.log(data);
                 importResults.successful.push(data); 
-                writeCategoryToBC(queue, count, index++)
+                writeCategoryToBC(queue, count, index++);
             })
             .catch(err => {
                 console.log(err);
                 importResults.failed.push(err);
+                writeCategoryToBC(queue, count, index++);
             })
         }
         if (index == count) {
