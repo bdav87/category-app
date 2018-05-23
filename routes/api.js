@@ -8,6 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const upload = multer();
+const { finished } = require('stream');
 
 let bc;
 
@@ -112,9 +113,30 @@ router.get('/export', (req, res) => {
 
 router.post('/import', upload.single('csvFile'), (req, res) => {
     console.log('file? ', req.file);
-    var stream = fs.createReadStream(req.file.buffer);
- 
-    var csvStream = csv('working.csv')
+    let tempCSV = fs.createWriteStream('working.csv');
+    let stream = fs.createReadStream(req.file.buffer);
+    stream.pipe(tempCSV);
+
+    finished(stream, (err) => {
+        if (err) {
+            console.log('Error with read stream', err);
+            res.send(err);
+        } else {
+            console.log('Read stream finished');
+        }
+    });
+    finished(tempCSV, (err) => {
+        if (err) {
+            console.log('Error with write stream', err);
+            res.send(err);
+        } else {
+            console.log('Write stream finished!!!');
+            res.send('temp CSV was written from upload!')
+        }
+    });
+
+    /*
+    var csvStream = csv()
     .on("data", function(data){
          console.log(data);
     })
@@ -123,8 +145,9 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     });
  
     stream.pipe(csvStream);
+    */
 
-    (req.file) ? res.send(`File: ${req.file.originalname} uploaded`) : res.send('no file detected')
+    //(req.file) ? res.send(`File: ${req.file.originalname} uploaded`) : res.send('no file detected')
     
     
 })
