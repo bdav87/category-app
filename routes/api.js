@@ -117,6 +117,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     let csvStream = csv();
 
     csvStream
+    .fromStream(uploadedCSV, {headers: true})
     .on('data', data=>console.log(data))
     .on('end', ()=> {
         console.log('done');
