@@ -9,7 +9,7 @@ const path = require('path');
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({limits: {files: 1, fileSize: 1000000}, storage: storage });
-const { Readable } = require('stream');
+const streamifier = require('streamifier');
 
 let bc;
 
@@ -113,8 +113,7 @@ router.get('/export', (req, res) => {
 })
 
 router.post('/import', upload.single('csvFile'), (req, res) => {
-    let uploadedCSV = new Readable(req.file.buffer);
-    //let tempCSV = fs.createWriteStream('nodetemp.csv');
+    let uploadedCSV =  new streamifier(req.file.buffer);
     let csvStream = csv();
 
     csvStream
@@ -124,7 +123,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     uploadedCSV.pipe(csvStream);
 
     uploadedCSV.on('data', (chunk) => {
-        csvStream.write(chunk);
+        csvStream.read(chunk);
     });
     uploadedCSV.on('end', () => {
         csvStream.end();
