@@ -114,7 +114,7 @@ router.get('/export', (req, res) => {
 
 router.post('/import', upload.single('csvFile'), (req, res) => {
     let uploadedCSV = streamifier.createReadStream(req.file.buffer);
-    let csvStream = csv();
+    let csvStream = csv;
 
     csvStream
     .fromStream(uploadedCSV, {headers: true})
