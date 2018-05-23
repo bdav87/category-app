@@ -1,5 +1,7 @@
 <h3>Import Categories</h3>
 <div class='row'>
+    <div class="alert alert-success" role="alert" id='importAlert'>
+    </div>
     <div class='col mx-4' id='dropTarget'>
         <form id='fileUploadForm' enctype='multipart/form-data'>
 
@@ -23,10 +25,13 @@
     <div id='importProgressArea' class='col mx-4'>
         <h3 id='progressHeading'>In Progress</h3>
         <p>Details</p>
-        <ul>
-            <li>Successful: <span id='importSuccessCount'>0</span></li>
-            <li>Failed: <span id='importFailCount'>0</span></li>
-            <li>Progress: <span id='importProgress'>0%</span></li>
+        <ul class='list-group'>
+            <li class='list-group-item'>Successful: <span id='importSuccessCount'>loading...</span></li>
+            <li class='list-group-item'>Failed: <span id='importFailCount'>loading...</span></li>
+            <li class='list-group-item'>Progress: <span id='importProgress'>loading...</span></li>
         </ul>
+        
+        <button id='restartLink' class='btn btn-primary'>Click here to start over</button>
+        
     </div>
 </div>

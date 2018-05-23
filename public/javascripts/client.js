@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function(){
           $('#importFailCount').text(data.failed);
           $('#importProgress').text('100%');
           $('#progressHeading').text('Completed');
+          $('#restartLink').show();
         }
       })
     }
@@ -65,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function(){
       function uploadFile(file) {
         $('#dropInstructions').hide();
         $('#importButtonArea').hide();
+        $('#importAlert').text('Import started, please wait...').show();
 
         console.log('Submitting this file',file.values().next().value);
 

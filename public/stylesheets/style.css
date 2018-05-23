@@ -88,3 +88,10 @@ nav {
   color: #000;
   min-height: 400px;
 }
+
+#restartLink {
+  display: none;
+}
+#importAlert {
+  display: none;
+}
