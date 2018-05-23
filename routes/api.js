@@ -121,13 +121,10 @@ router.get('/export', (req, res) => {
 })
 
 router.post('/import', upload.single('csvFile'), (req, res) => {
-    
-    
-    //let tempCSV = fs.createWriteStream('/tmp/my-uploads/nodetemp.csv');
-    //let stream = fs.createReadStream(req.file.buffer);
+    res.send('maybe it uploaded?')
+    /*
     let stream = fs.createReadStream('/tmp/my-uploads/nodetemp.csv');
-    //stream.pipe(tempCSV);
-
+    
     finished(stream, (err) => {
         if (err) {
             console.log('Error with read stream', err);
@@ -137,33 +134,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
             res.send('great');
         }
     });
-    /*
-    finished(tempCSV, (err) => {
-        if (err) {
-            console.log('Error with write stream', err);
-            res.send(err);
-        } else {
-            console.log('Write stream finished!!!');
-            res.send('temp CSV was written from upload!')
-        }
-    });
     */
-
-    /*
-    var csvStream = csv()
-    .on("data", function(data){
-         console.log(data);
-    })
-    .on("end", function(){
-         console.log("done");
-    });
- 
-    stream.pipe(csvStream);
-    */
-
-    //(req.file) ? res.send(`File: ${req.file.originalname} uploaded`) : res.send('no file detected')
-    
-    
 })
 
 
