@@ -46,9 +46,14 @@ document.addEventListener('DOMContentLoaded', function(){
         })
         .done(data => {
           document.getElementById('fileUploadForm').reset();
+          fileInputElement.val(null);
           console.log(data);
         })
-        .fail(err => console.log(err.responseText))
+        .fail(err => {
+          document.getElementById('fileUploadForm').reset();
+          fileInputElement.val(null);
+          console.log(err.responseText)
+        })
       }
 
     }
