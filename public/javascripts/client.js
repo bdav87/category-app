@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function(){
         })
         .done(data => {
           return console.log(data);
+          window.location.reload();
         })
         .fail(err => {
           return console.log(err.responseText);

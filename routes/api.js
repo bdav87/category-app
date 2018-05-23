@@ -114,7 +114,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     console.log('file? ', req.file);
     var stream = fs.createReadStream(req.file.buffer);
  
-    var csvStream = csv()
+    var csvStream = csv('working.csv')
     .on("data", function(data){
          console.log(data);
     })
