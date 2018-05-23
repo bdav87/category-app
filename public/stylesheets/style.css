@@ -30,7 +30,7 @@ nav {
   border-bottom: 4px solid #4b71fc !important;
 }
 
-.droptarget {
+.dropzone {
   border-radius: 12px;
   border: 2px dashed #d4d4d4;
   min-height: 400px;
@@ -41,6 +41,18 @@ nav {
   justify-content: center;
   flex-direction: column;
 }
+/*
+#dropTarget {
+  border-radius: 12px;
+  border: 2px dashed #d4d4d4;
+  min-height: 400px;
+  background: #FFF;
+  color: #000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}*/
 
 #dropTarget.drag {
   border: 2px solid #a0d15e;
