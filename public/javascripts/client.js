@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function(){
           swapUI(data);
         })
         .fail(err => {
-          return console.log(err.responseText);
+          return console.log(err.error);
         }))
       }
 
