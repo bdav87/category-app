@@ -118,33 +118,13 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 
     csvStream
     .on('data', data=>console.log(data))
-    .on('end', ()=>console.log('done'));
-
-    uploadedCSV.pipe(csvStream);
-
-    uploadedCSV.on('data', (chunk) => {
-        csvStream.read(chunk);
-    });
-    uploadedCSV.on('end', () => {
-        csvStream.end();
+    .on('end', ()=> {
+        console.log('done');
         res.send('maybe it uploaded?');
     });
 
-    
-    
-    /*
-    let stream = fs.createReadStream('/tmp/my-uploads/nodetemp.csv');
-    
-    finished(stream, (err) => {
-        if (err) {
-            console.log('Error with read stream', err);
-            res.send(err);
-        } else {
-            console.log('Read stream finished');
-            res.send('great');
-        }
-    });
-    */
+    uploadedCSV.pipe(csvStream);
+
 })
 
 
