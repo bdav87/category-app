@@ -148,9 +148,9 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     });
 
     function createCategories(categories, bc) {
-        const count = categories.length;
+        const count = categories.length - 1;
         if (bc) {
-            writeCategoryToBC(categories, count, 0);
+            writeCategoryToBC(categories, count, 1);
         }
     }
 
@@ -173,7 +173,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
                 writeCategoryToBC(queue, count, index);
             })
         }
-        if (index == count - 1) {
+        if (index == count) {
             console.log('index: ', index);
             console.log('count: ', count);
             console.log('current category: ', queue[index]);
