@@ -117,27 +117,34 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     let uploadedCSV = streamifier.createReadStream(req.file.buffer);
     let csvStream = csv;
     let categoryArray = [];
+    //ignoring id for now in headers
+    //TODO: handle ID to update existing categories.
+    const headers = [ , 'parent_id', 'name', 'description', 'sort_order', 'page_title', 'meta_keywords', 'meta_description', 'image_url', 'is_visible', 'search_keywords', 'default_product_sort'];
 
     class UploadProcess extends EventEmitter {}
     const uploadProcess = new UploadProcess();
 
     csvStream
-    .fromStream(uploadedCSV, {headers: true})
+    .fromStream(uploadedCSV, {headers: headers})
     .on('data', data=>readyCategories(data))
-    .on('end', ()=> {
-        //console.log(categoryArray);
-        //res.send('maybe it uploaded?');
-        uploadProcess.emit('done', categoryArray);
-    });
+    .on('end', ()=> uploadProcess.emit('done', categoryArray));
 
     function readyCategories(data){
         return categoryArray.push(data);
     }
 
     uploadProcess.on('done', (categories)=> {
+        createCategories(categories, bc);
         console.log('Processed categories: ', categories);
-        res.send(categories);
-    })
+        //res.send(categories);
+    });
+
+    function createCategories(categories, bc_api) {
+        if (bc_api) {
+            categories.forEach(bc_api.post('/catalog/categories', category));
+            res.send('done')
+        }
+    }
 
 })
 
