@@ -10,6 +10,7 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({limits: {files: 1, fileSize: 1000000}, storage: storage });
 const streamifier = require('streamifier');
+const EventEmitter = require('events');
 
 let bc;
 
@@ -115,16 +116,28 @@ router.get('/export', (req, res) => {
 router.post('/import', upload.single('csvFile'), (req, res) => {
     let uploadedCSV = streamifier.createReadStream(req.file.buffer);
     let csvStream = csv;
+    let categoryArray = [];
+
+    class UploadProcess extends EventEmitter {}
+    const uploadProcess = new UploadProcess();
 
     csvStream
     .fromStream(uploadedCSV, {headers: true})
-    .on('data', data=>console.log(data))
+    .on('data', data=>readyCategories(data))
     .on('end', ()=> {
-        console.log('done');
-        res.send('maybe it uploaded?');
+        //console.log(categoryArray);
+        //res.send('maybe it uploaded?');
+        uploadProcess.emit('done', categoryArray);
     });
 
-    //uploadedCSV.pipe(csvStream);
+    function readyCategories(data){
+        return categoryArray.push(data);
+    }
+
+    uploadProcess.on('done', (categories)=> {
+        console.log('Processed categories: ', categories);
+        res.send(categories);
+    })
 
 })
 
