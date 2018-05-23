@@ -3,7 +3,7 @@
 
     <div class='col mx-4' id='dropTarget'>
 
-        <form id='fileUploadForm'>
+        <form id='fileUploadForm' enctype='multipart/form-data'>
 
         <div id='dropInstructions'>
             <strong><p>Drag & Drop your CSV file here</p></strong>
@@ -12,7 +12,7 @@
 
             <div class='form-group'>
             <label for='fileSelect' id='fileLabel'>Click here to upload</label>
-            <input type='file' id='fileSelect' accept='text/csv'/> 
+            <input type='file' id='fileSelect' name='csvFile'/> 
             </div>
         </div>
 

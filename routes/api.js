@@ -6,6 +6,10 @@ const bcAuth = require('../lib/bc_auth');
 const csv = require('fast-csv');
 const fs = require('fs');
 const path = require('path');
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({limits: {files: 1, fileSize: 1000000}, storage: storage });
+const streamifier = require('streamifier');
 
 let bc;
 
@@ -108,8 +112,19 @@ router.get('/export', (req, res) => {
     }
 })
 
-router.post('/import', (req, res) => {
-    res.send('You are importing a file');
+router.post('/import', upload.single('csvFile'), (req, res) => {
+    let uploadedCSV = streamifier.createReadStream(req.file.buffer);
+    let csvStream = csv();
+
+    csvStream
+    .on('data', data=>console.log(data))
+    .on('end', ()=> {
+        console.log('done');
+        res.send('maybe it uploaded?');
+    });
+
+    uploadedCSV.pipe(csvStream);
+
 })
 
 
