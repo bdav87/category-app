@@ -18,13 +18,13 @@ document.addEventListener('DOMContentLoaded', function(){
       $.get('/api/progress', (data) => {
         if (data.started && data.complete == false) {
           $('#importSuccessCount').text(data.successful);
-          $('#importFailCount').text(data.failed);
+          $('#importFailCount').text(JSON.stringify(data.failed));
           $('#importProgress').text(`${data.progress}%`);
           return importUI();
         }
         if (data.started && date.complete == true) {
           $('#importSuccessCount').text(data.successful);
-          $('#importFailCount').text(data.failed);
+          $('#importFailCount').text(JSON.stringify(data.failed));
           $('#importProgress').text('100%');
           $('#progressHeading').text('Import completed');
         }
