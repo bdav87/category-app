@@ -45,10 +45,7 @@ document.addEventListener('DOMContentLoaded', function(){
           processData: false,
           contentType: false
         })
-        .done(data => {
-          return console.log(data);
-          window.location.reload();
-        })
+        .done(() => window.location.reload())
         .fail(err => {
           return console.log(err.responseText);
         }))
