@@ -37,7 +37,8 @@ document.addEventListener('DOMContentLoaded', function(){
         $('#resultsArea').show().text(file.name);
         console.log('Submitting this file',file.values().next().value);
 
-        $.ajax({
+        return (
+          $.ajax({
           url: '/api/import',
           method: 'POST',
           data: file,
@@ -46,15 +47,13 @@ document.addEventListener('DOMContentLoaded', function(){
         })
         .done(data => {
           document.getElementById('fileUploadForm').reset();
-          fileInputElement.files = null;
           console.log(data);
-          console.log(fileInputElement.files)
+          console.log(fileInputElement.val())
         })
         .fail(err => {
           document.getElementById('fileUploadForm').reset();
-          fileInputElement.files = null;
           console.log(err.responseText)
-        })
+        }))
       }
 
     }
