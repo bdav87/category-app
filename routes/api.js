@@ -7,7 +7,7 @@ const csv = require('fast-csv');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
-const upload = multer();
+const upload = multer({files: 1, fileSize: 1000000, storage: storage});
 const { finished } = require('stream');
 
 let bc;
@@ -112,10 +112,19 @@ router.get('/export', (req, res) => {
 })
 
 router.post('/import', upload.single('csvFile'), (req, res) => {
-    console.log('file? ', req.file);
-    let tempCSV = fs.createWriteStream('working.csv');
-    let stream = fs.createReadStream(req.file.buffer);
-    stream.pipe(tempCSV);
+    var storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+          cb(null, '/tmp/my-uploads')
+        },
+        filename: function (req, file, cb) {
+          cb(null, 'nodetemp.csv')
+        }
+      })
+    
+    //let tempCSV = fs.createWriteStream('/tmp/my-uploads/nodetemp.csv');
+    //let stream = fs.createReadStream(req.file.buffer);
+    let stream = fs.createReadStream('/tmp/my-uploads/nodetemp.csv');
+    //stream.pipe(tempCSV);
 
     finished(stream, (err) => {
         if (err) {
@@ -123,8 +132,10 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
             res.send(err);
         } else {
             console.log('Read stream finished');
+            res.send('great');
         }
     });
+    /*
     finished(tempCSV, (err) => {
         if (err) {
             console.log('Error with write stream', err);
@@ -134,6 +145,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
             res.send('temp CSV was written from upload!')
         }
     });
+    */
 
     /*
     var csvStream = csv()
