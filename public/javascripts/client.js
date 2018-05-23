@@ -46,12 +46,13 @@ document.addEventListener('DOMContentLoaded', function(){
         })
         .done(data => {
           document.getElementById('fileUploadForm').reset();
-          fileInputElement.val(null);
+          fileInputElement.files = null;
           console.log(data);
+          console.log(fileInputElement.files)
         })
         .fail(err => {
           document.getElementById('fileUploadForm').reset();
-          fileInputElement.val(null);
+          fileInputElement.files = null;
           console.log(err.responseText)
         })
       }
