@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function(){
       initDragDrop()
 
       fileInputElement.change((event)=> {
-        let csv_to_send = event.target.files[0];
+        const csv_to_send = event.target.files[0];
         return readyImportButton(fileForm, csv_to_send);
       })
 
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function(){
         form.submit((event) => {
           event.preventDefault();
           event.stopPropagation();
-          let file_to_send = new FormData();
+          const file_to_send = new FormData();
           file_to_send.append('csvFile', csv);
           return uploadFile(file_to_send);
         });
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function(){
     }
     
     function prepExportbutton(){
-      let button = document.getElementById('exportBtn');
+      const button = document.getElementById('exportBtn');
       button.addEventListener('click', (event) => {
         event.preventDefault();
 	      return window.location = '/api/export';
