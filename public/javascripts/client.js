@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function(){
       })
 
       function readyImportButton(form, csv) {
+        $('#dropTarget').removeAttr('id');
         $('#importButtonArea').css({'display': 'flex', 'flex-direction': 'column'});
         $('#dropInstructions').hide();
         $('#cancelImport').click((e) => {

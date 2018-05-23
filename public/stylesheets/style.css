@@ -30,7 +30,7 @@ nav {
   border-bottom: 4px solid #4b71fc !important;
 }
 
-#dropTarget {
+.dropTarget {
   border-radius: 12px;
   border: 2px dashed #d4d4d4;
   min-height: 400px;
