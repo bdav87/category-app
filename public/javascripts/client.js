@@ -18,15 +18,15 @@ document.addEventListener('DOMContentLoaded', function(){
       $.get('/api/progress', (data) => {
         if (data.complete == false) {
           $('#importSuccessCount').text(data.successful);
-          $('#importFailCount').text(JSON.stringify(data.failed));
+          $('#importFailCount').text(data.failed);
           $('#importProgress').text(`${data.progress}%`);
           return importUI();
         }
         if (data.complete == true) {
           $('#importSuccessCount').text(data.successful);
-          $('#importFailCount').text(JSON.stringify(data.failed));
+          $('#importFailCount').text(data.failed);
           $('#importProgress').text('100%');
-          $('#progressHeading').text('Import completed');
+          $('#progressHeading').text('Completed');
         }
       })
     }
@@ -63,9 +63,9 @@ document.addEventListener('DOMContentLoaded', function(){
       }
 
       function uploadFile(file) {
-        $('#dropInstructions').show();
+        $('#dropInstructions').hide();
         $('#importButtonArea').hide();
-        $('#resultsArea').show().text(file.name);
+
         console.log('Submitting this file',file.values().next().value);
 
         return (

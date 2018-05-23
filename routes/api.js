@@ -122,7 +122,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 
     importResults = {
         successful: 0, 
-        failed: [], 
+        failed: 0, 
         complete: false, 
         started: true,
         progress: 0
@@ -168,7 +168,6 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
         if (index < count) {
             bc.post('/catalog/categories', queue[index])
             .then(data => {
-                console.log(data);
                 importResults.successful++; 
                 importResults.progress = Math.round(index / count * 100);
                 index++;
@@ -176,7 +175,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
             })
             .catch(err => {
                 console.log(err);
-                importResults.failed.push(err);
+                importResults.failed++;
                 importResults.progress = Math.round(index / count * 100);
                 index++;
                 writeCategoryToBC(queue, count, index);
@@ -185,18 +184,15 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
         if (index == count) {
             bc.post('/catalog/categories', queue[index])
             .then(data => {
-                console.log(data);
                 importResults.successful++; 
                 importResults.complete = true;
                 importResults.started = false;
-                //res.send(importResults);
             })
             .catch(err => {
                 console.log(err);
-                importResults.failed.push(err);
+                importResults.failed++;
                 importResults.complete = true; 
                 importResults.started = false;               
-                //res.send(importResults);
             })
         }
         
