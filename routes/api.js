@@ -113,11 +113,20 @@ router.get('/export', (req, res) => {
     }
 })
 
+//Import a CSV and create categories
+let importResults = {started: false};
 router.post('/import', upload.single('csvFile'), (req, res) => {
     let uploadedCSV = streamifier.createReadStream(req.file.buffer);
     let csvStream = csv;
     let categoryArray = [];
-    let importResults = {successful: [], failed: []};
+
+    importResults = {
+        successful: [], 
+        failed: [], 
+        complete: false, 
+        started: true,
+        progress: 0
+    };
     //ignoring id for now in headers
     //TODO: handle ID and default product sort
     const headers = [ , 'parent_id', 'name', 'description', 'sort_order', 'page_title', 'meta_keywords', 'meta_description', 'image_url', 'is_visible', 'search_keywords', ,];
@@ -150,6 +159,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     function createCategories(categories, bc) {
         const count = categories.length - 1;
         if (bc) {
+            res.send({"import": "started"});
             writeCategoryToBC(categories, count, 1);
         }
     }
@@ -160,12 +170,14 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
             .then(data => {
                 console.log(data);
                 importResults.successful.push(data); 
+                importResults.progress = Math.round(index / count * 100);
                 index++;
                 writeCategoryToBC(queue, count, index);
             })
             .catch(err => {
                 console.log(err);
                 importResults.failed.push(err);
+                importResults.progress = Math.round(index / count * 100);
                 index++;
                 writeCategoryToBC(queue, count, index);
             })
@@ -175,17 +187,26 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
             .then(data => {
                 console.log(data);
                 importResults.successful.push(data); 
-                res.send(importResults);
+                importResults.complete = true;
+                importResults.started = false;
+                //res.send(importResults);
             })
             .catch(err => {
                 console.log(err);
                 importResults.failed.push(err);
-                res.send(importResults);
+                importResults.complete = true; 
+                importResults.started = false;               
+                //res.send(importResults);
             })
         }
         
     }
 
+})
+
+//A route to poll the progress of the import
+router.get('/progress', (req, res) => {
+    res.send(importResults);
 })
 
 

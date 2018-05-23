@@ -1,8 +1,6 @@
 <h3>Import Categories</h3>
 <div class='row'>
-
     <div class='col mx-4' id='dropTarget'>
-
         <form id='fileUploadForm' enctype='multipart/form-data'>
 
         <div id='dropInstructions'>
@@ -19,17 +17,16 @@
         <div id='importButtonArea'>
             <button type='submit' id='importButton' class='btn btn-primary'>Import your CSV</button>
         </div>
-    
-    
         </form>
-
-
     </div>
 
-    
-</div>
-<div class='row'>
-    <div class='col' id='resultsArea'>
-        Results
+    <div id='importProgressArea' class='col mx-4'>
+        <h3 id='progressHeading'>Import in Progress</h3>
+        <p>Details</p>
+        <ul>
+            <li>Successful: <span id='importSuccessCount'></span></li>
+            <li>Failed: <span id='importFailCount'></span></li>
+            <li>Progress: <span id='importProgress'></span></li>
+        </ul>
     </div>
 </div>

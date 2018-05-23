@@ -36,7 +36,7 @@ nav {
   min-height: 400px;
   background: #FFF;
   color: #000;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   flex-direction: column;
@@ -80,4 +80,11 @@ nav {
 
 #fileUploadForm {
   text-align: center;
+}
+
+#importProgressArea {
+  display: none;
+  background: #FFF;
+  color: #000;
+  min-height: 400px;
 }
