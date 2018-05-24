@@ -130,7 +130,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     };
     //ignoring id for now in headers
     //TODO: handle ID and default product sort
-    const headers = [ , 'parent_id', 'name', 'description', 'sort_order', 'page_title', 'meta_keywords', 'meta_description', 'image_url', 'is_visible', 'search_keywords', ,];
+    const headers = [ , 'parent_id', 'name', 'description', 'sort_order', 'page_title', 'meta_keywords', 'meta_description', 'image_url', 'is_visible', 'search_keywords'];
 
     class UploadProcess extends EventEmitter {}
     const uploadProcess = new UploadProcess();
