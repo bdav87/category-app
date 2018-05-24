@@ -1,4 +1,64 @@
 <h3>Instructions</h3>
 <div class='card'>
-Integer elementum dui molestie nisi auctor, at porta ante iaculis. Vestibulum tincidunt sapien eget dolor hendrerit, ac dignissim ligula suscipit. Maecenas quis mi scelerisque metus convallis vehicula rhoncus vel turpis. Donec nisi elit, dictum vel tincidunt vitae, volutpat quis mi. Pellentesque cursus nibh vel scelerisque vulputate. Suspendisse ultrices pharetra mi, sed pretium erat maximus nec. Maecenas commodo, magna at tincidunt blandit, diam urna commodo arcu, at efficitur libero lorem eu enim. Maecenas ut bibendum ligula, non gravida magna. Sed sed maximus tortor. Nunc vulputate ultricies nunc, vitae facilisis lacus. Nunc efficitur quis turpis eget laoreet.
+<h4>Category Importer and Exporter</h4>
+
+<p>Imports new categories into a BigCommerce store using CSV spreadsheets.</p>
+
+<p>Exports a store's entire collection of categories and provides CSV files for download.</p>
+
+<h5>Importing Categories</h5> 
+<p>
+When importing new categories, these CSV headers must be present exactly as written and in the order listed here:
+</p>
+
+<ul>
+    <li>id</li>
+    <li>parent_id</li>
+    <li>name</li>
+    <li>description</li>
+    <li>sort_order</li>
+    <li>page_title</li>
+    <li>meta_keywords</li>
+    <li>meta_description</li>
+    <li>image_url</li>
+    <li>is_visible</li>
+    <li>search_keywords</li>
+</ul>
+
+<img src='/images/categoryheaders.png' style='max-width: 100%' />
+
+<p>
+The <kbd>id</kbd> values are currently ignored - in the future this can be used to update existing categories.
+</p>
+
+<p>
+To ensure a new category is created, you need to set the <kbd>parent_id</kbd> to <kbd>0</kbd> and provide a unique <kbd>name</kbd>.
+</p>
+
+<p>
+To create subcategories, use the <kbd>parent_id</kbd> of an existing category. Exporting the store categories is an easy way to get the <kbd>parent_id</kbd> of a category.
+</p>
+
+<p>
+CSV files are limited to 1 MB in size. A CSV that large is capable of creating several thousand categories. If you accidentally upload a file that's too big the app will let you know right away and take you back to the beginning.
+</p>
+
+
+<h5>Features</h5>
+<p>HTML is accepted in the category description.</p>
+
+<p>To upload a CSV, you can drag and drop your file from your computer or click the upload link.</p>
+
+<p>If you accidentally dropped the wrong file in, don't worry! You can hit cancel and select a different file instead. </p>
+
+<p>The app detects if a file is in the wrong format and notifies the user instead of attempting import.</p>
+
+<p>When a file is submitted for import, you can leave the page and come back later to check on the progress.</p>
+
+<h4>Exporting categories</h4>
+
+<p>Exporting categories is as easy as navigating to the export area and pressing the export button. A CSV file will be downloaded to your computer. </p>
+
+<p>This includes more data than what's accepted by the importer, so you need to make the headers match per the instructions above if you want to import the file.</p>
+
 </div>
