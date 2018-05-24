@@ -19,20 +19,20 @@ When importing new categories, these CSV headers must be present exactly as writ
 - is_visible
 - search_keywords
 
-The **id** values are currently ignored - in the future this can be used to update existing categories.
+<img width="1061" alt="categoryheaders" src="https://user-images.githubusercontent.com/16565458/40462676-9480ef86-5ed6-11e8-9682-d4602af2f65d.png">
 
-To ensure a new category is created, you need to set the **parent_id** to 0 and provide a unique **name**.
+- The **id** values are currently ignored - in the future this can be used to update existing categories.
 
-To create subcategories, use the **parent_id** of an existing category. Exporting the store categories is an easy way to get the **parent_id** of a category.
+- To ensure a new category is created, you need to set the **parent_id** to 0 and provide a unique **name**.
 
-CSV files are limited to 1 MB in size. A CSV that large is capable of creating several thousand categories. If you accidentally upload a file that's too big the app will let you know right away and take you back to the beginning.
+- To create subcategories, use the **parent_id** of an existing category. Exporting the store categories is an easy way to get the **parent_id** of a category.
+
+- CSV files are limited to 1 MB in size. A CSV that large is capable of creating several thousand categories. If you accidentally upload a file that's too big the app will let you know right away and take you back to the beginning.
 
 ----
 
 ### Features
 - HTML is accepted in the category description.
-
-- To upload a CSV, you can drag and drop your file from your computer or click the upload link.
 
 - If you accidentally dropped the wrong file in, don't worry! You can hit cancel and select a different file instead. 
 
@@ -40,10 +40,13 @@ CSV files are limited to 1 MB in size. A CSV that large is capable of creating s
 
 - When a file is submitted for import, you can leave the page and come back later to check on the progress.
 
+- To upload a CSV, you can drag and drop your file from your computer or click the upload link.
+<img width="1035" alt="category-app-ui" src="https://user-images.githubusercontent.com/16565458/40462667-87754bca-5ed6-11e8-9645-8e4ccd14ca7b.png">
+
 ----
 
 ## Exporting categories
 
-Exporting categories is as easy as navigating to the export area and pressing the export button. A CSV file will be downloaded to your computer. 
+Exporting categories is as easy as clicking the export tab and pressing the export button. A CSV file will be downloaded to your computer. 
 
 This includes more data than what's accepted by the importer, so you need to make the headers match per the instructions above if you want to import the file.
