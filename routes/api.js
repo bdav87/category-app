@@ -14,14 +14,15 @@ const streamifier = require('streamifier');
 const EventEmitter = require('events');
 
 let bc;
-let hash = req.session.storehash;
 
-bcAuth(hash)
-.then(data => bc = data)
-.catch(err => console.log(err))
 
 // TEST ROUTE to generate a category
 router.get('/single', (req,res) => {
+    let hash = req.session.storehash;
+
+    bcAuth(hash)
+    .then(data => bc = data)
+    .catch(err => console.log(err))
 
     function createSampleCategory(bc_api) {
         let category = {
@@ -42,6 +43,11 @@ router.get('/single', (req,res) => {
 // When a user hits the export button all categories
 // will be exported into a CSV file
 router.get('/export', (req, res) => {
+    let hash = req.session.storehash;
+
+    bcAuth(hash)
+    .then(data => bc = data)
+    .catch(err => console.log(err))
 
     let date = new Date().toDateString().split(' ').join('');
     let filename = `category-export-${date}.csv`;
@@ -118,6 +124,13 @@ router.get('/export', (req, res) => {
 //Import a CSV and create categories
 let importResults = {started: false};
 router.post('/import', upload.single('csvFile'), (req, res) => {
+    
+    let hash = req.session.storehash;
+
+    bcAuth(hash)
+    .then(data => bc = data)
+    .catch(err => console.log(err))
+
     let uploadedCSV = streamifier.createReadStream(req.file.buffer);
     let csvStream = csv;
     let categoryArray = [];
