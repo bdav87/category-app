@@ -46,7 +46,10 @@ router.get('/export', (req, res) => {
     let hash = req.session.storehash;
 
     bcAuth(hash)
-    .then(data => bc = data)
+    .then(data => {
+        bc = data;
+        exportCategories(bc, '?page=1&limit=250')
+    })
     .catch(err => console.log(err))
 
     let date = new Date().toDateString().split(' ').join('');
@@ -115,10 +118,10 @@ router.get('/export', (req, res) => {
         
         
     }
-
+    /*
     if (bc) {
         exportCategories(bc, '?page=1&limit=250');
-    }
+    }*/
 })
 
 //Import a CSV and create categories
