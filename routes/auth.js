@@ -11,12 +11,10 @@ class AuthEmitter extends EventEmitter {}
 const authEmitter = new AuthEmitter();
 
 router.get('/', (req, res) => {
-    console.log('Sessions?', req.session);
-    console.log('Auth GET');
+
     receiveAuthFromBC(req.query);
 
     function receiveAuthFromBC(query){
-        console.log('Dealing with query from BC now');
         const bc = new BigCommerce({
             logLevel: 'info',
             clientId: process.env.CLIENTID,
@@ -35,7 +33,6 @@ router.get('/', (req, res) => {
     }
 
     function processAuth(data){
-        console.log('Processing auth and setting accesstoken');
         const bcDetails = {
             accessToken: data.access_token,
             storeHash: extractHash(data.context),
@@ -53,7 +50,6 @@ router.get('/', (req, res) => {
     }
 
     function saveAuthToDB(bcDetails){
-        console.log('Saving auth token to database');
         const connection = mysql.createConnection({
             host: process.env.SQLHOST,
             user: process.env.SQLUN,

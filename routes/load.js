@@ -5,7 +5,6 @@ const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
 
 router.get('/', (req, res) => {
-    console.log('load route session?', req.session);
 
     function initiateVerification(payload) {
 
@@ -84,7 +83,6 @@ router.get('/', (req, res) => {
     function routeToDashboard(storehash){
         req.session.validated = true;
         req.session.storehash = storehash;
-        console.log(req.session);
         res.redirect('/');
     } 
     
