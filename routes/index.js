@@ -4,6 +4,12 @@ const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
 const session = require('express-session');
 
+router.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+}));
+
 /* GET home page. */
 router.get('/', function(req, res) {
   if (req.session.validated){

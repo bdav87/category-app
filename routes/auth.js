@@ -6,13 +6,6 @@ const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
 const EventEmitter = require('events');
 
-  
-router.use(session({
-    secret: 'keyboard cat',
-    resave: true,
-    saveUninitialized: true,
-  }));
-
 class AuthEmitter extends EventEmitter {}
 
 const authEmitter = new AuthEmitter();
