@@ -127,7 +127,7 @@ router.get('/', (req, res) => {
         }
 
         function routeUserAfterAuth(){
-            res.redirect('/index');
+            res.redirect('/');
         }
 
         authEmitter.once('connected', checkForExistingHash);

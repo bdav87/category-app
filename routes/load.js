@@ -59,6 +59,7 @@ router.get('/', (req, res) => {
                 if (userIndex == -1) {
                     addUser(configID, email);
                 } else {
+                    connection.end();
                     routeToDashboard(hash);
                 }
             })
@@ -71,17 +72,19 @@ router.get('/', (req, res) => {
                 if (error) {
                     throw error;
                 }
+                connection.end();
                 routeToDashboard(hash);
             });
+            
         }
 
     }
 
     function routeToDashboard(storehash){
-        connection.end();
+        
         req.session.validated = true;
         req.session.storehash = storehash;
-        res.redirect('/index');
+        res.redirect('/');
     } 
     
 })
