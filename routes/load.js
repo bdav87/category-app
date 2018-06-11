@@ -82,7 +82,6 @@ router.get('/', (req, res) => {
     }
 
     function routeToDashboard(storehash){
-        
         req.session.validated = true;
         req.session.storehash = storehash;
         console.log(req.session);
