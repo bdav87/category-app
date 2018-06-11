@@ -43,7 +43,7 @@ const sessionStore = new MySQLStore(sqlOptions);
 
 app.use(session({
   secret: 'keyboard cat',
-  resave: false,
+  resave: true,
   store: sessionStore,
   saveUninitialized: true,
   cookie: { secure: true }
