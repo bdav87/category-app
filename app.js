@@ -84,4 +84,9 @@ app.use(session({
   cookie: { secure: true }
 }));
 
+app.use((req,res, next) => {
+  console.log("session???", req.session);
+  next();
+})
+
 module.exports = app;
