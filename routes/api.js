@@ -43,6 +43,7 @@ router.get('/single', (req,res) => {
 // When a user hits the export button all categories
 // will be exported into a CSV file
 router.get('/export', (req, res) => {
+    console.log("session:",req.session);
     let hash = req.session.storehash;
 
     bcAuth(hash)
