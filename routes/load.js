@@ -84,6 +84,7 @@ router.get('/', (req, res) => {
         
         req.session.validated = true;
         req.session.storehash = storehash;
+        console.log(req.session);
         res.redirect('/');
     } 
     
