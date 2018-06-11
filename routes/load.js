@@ -1,15 +1,11 @@
-const session = require('express-session');
 const express = require('express');
 const router = express.Router();
+const session = require('express-session');
 const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
 
-router.use(session({
-    secret: 'whatever',
-    resave: false
-}))
-
 router.get('/', (req, res) => {
+    console.log('load route session?', req.session);
 
     function initiateVerification(payload) {
 

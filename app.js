@@ -3,6 +3,15 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
+const SQLoptions = {
+  host: process.env.SQLHOST,
+  user: process.env.SQLUN,
+  password: process.env.SQLPW,
+  database: 'cat_app_db'
+}
+const sessionStore = new MySQLStore(SQLoptions);
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -29,6 +38,14 @@ filenames.forEach(function (filename) {
 });
 
 const app = express();
+
+app.use(session({
+  key: 'session_cookie_name',
+  secret: 'session_cookie_secret',
+  store: sessionStore,
+  resave: false,
+  saveUninitialized: false
+}));
 
 app.set('trust proxy', true);
 

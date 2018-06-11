@@ -14,10 +14,6 @@ const streamifier = require('streamifier');
 const EventEmitter = require('events');
 
 let bc;
-router.use(session({
-    secret: 'whatever',
-    resave: false
-}))
 
 // TEST ROUTE to generate a category
 router.get('/single', (req,res) => {
