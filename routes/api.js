@@ -1,6 +1,6 @@
 const express = require('express');
-const router = express.Router();
 const session = require('express-session');
+const router = express.Router();
 const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
 const bcAuth = require('../lib/bc_auth');
@@ -124,7 +124,7 @@ router.get('/export', (req, res) => {
 //Import a CSV and create categories
 let importResults = {started: false};
 router.post('/import', upload.single('csvFile'), (req, res) => {
-    
+
     let hash = req.session.storehash;
 
     bcAuth(hash)
