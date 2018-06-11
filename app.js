@@ -32,6 +32,25 @@ filenames.forEach(function (filename) {
 
 const app = express();
 
+const sqlOptions = {
+  host: process.env.SQLHOST,
+  user: process.env.SQLUN,
+  password: process.env.SQLPW,
+  database: 'cat_app_db'
+}
+
+const sessionStore = new MySQLStore(sqlOptions);
+
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  store: sessionStore,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}));
+
+app.set('trust proxy', true);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -41,8 +60,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.set('trust proxy', true);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -67,26 +84,5 @@ app.use(function(err, req, res, next) {
   res.send(err.message);
 });
 
-const sqlOptions = {
-  host: process.env.SQLHOST,
-  user: process.env.SQLUN,
-  password: process.env.SQLPW,
-  database: 'cat_app_db'
-}
-
-const sessionStore = new MySQLStore(sqlOptions);
-
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  store: sessionStore,
-  saveUninitialized: true,
-  cookie: { secure: true }
-}));
-
-app.use((req,res, next) => {
-  console.log("session???", req.session);
-  next();
-})
 
 module.exports = app;
