@@ -1,10 +1,10 @@
 var createError = require('http-errors');
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const session = require('express-session');
-const MySQLStore = require('express-mysql-session')(session);
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');

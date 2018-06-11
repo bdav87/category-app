@@ -1,5 +1,5 @@
-const express = require('express');
 const session = require('express-session');
+const express = require('express');
 const router = express.Router();
 const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
