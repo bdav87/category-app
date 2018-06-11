@@ -1,6 +1,4 @@
 var createError = require('http-errors');
-const session = require('express-session');
-const MySQLStore = require('express-mysql-session')(session);
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -31,23 +29,6 @@ filenames.forEach(function (filename) {
 });
 
 const app = express();
-
-const sqlOptions = {
-  host: process.env.SQLHOST,
-  user: process.env.SQLUN,
-  password: process.env.SQLPW,
-  database: 'cat_app_db'
-}
-
-const sessionStore = new MySQLStore(sqlOptions);
-
-app.use(session({
-  secret: 'keyboard cat',
-  resave: true,
-  store: sessionStore,
-  saveUninitialized: true,
-  cookie: { secure: true }
-}));
 
 app.set('trust proxy', true);
 
