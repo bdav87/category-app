@@ -27,11 +27,11 @@ router.get('/', (req, res) => {
         });
 
         bc.authorize(query)
+        .then(data => processAuth(data))
         .catch(err => {
             console.log(err);
             res.status('403').end()
         })
-        .then(data => processAuth(data))
     }
 
     function processAuth(data){
