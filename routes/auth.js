@@ -110,7 +110,7 @@ router.get('/', (req, res) => {
                 if (error) {
                     console.log('Error adding user to db: ', error);
                 }
-                authEmitter('installComplete')
+                authEmitter.emit('installComplete');
             })
         }
         
