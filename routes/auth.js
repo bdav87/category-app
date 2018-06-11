@@ -4,7 +4,25 @@ const router = express.Router();
 const BigCommerce = require('node-bigcommerce');
 
 const mysql = require('mysql');
+const MySQLStore = require('express-mysql-session')(session);
 const EventEmitter = require('events');
+
+const sqlOptions = {
+    host: process.env.SQLHOST,
+    user: process.env.SQLUN,
+    password: process.env.SQLPW,
+    database: 'cat_app_db'
+  }
+  
+  const sessionStore = new MySQLStore(sqlOptions);
+  
+  router.use(session({
+    secret: 'keyboard cat',
+    resave: true,
+    store: sessionStore,
+    saveUninitialized: true,
+    cookie: { secure: true }
+  }));
 
 class AuthEmitter extends EventEmitter {}
 
