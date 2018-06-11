@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -66,9 +67,19 @@ app.use(function(err, req, res, next) {
   res.send(err.message);
 });
 
+const sqlOptions = {
+  host: process.env.SQLHOST,
+  user: process.env.SQLUN,
+  password: process.env.SQLPW,
+  database: 'cat_app_db'
+}
+
+const sessionStore = new MySQLStore(sqlOptions);
+
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
+  store: sessionStore,
   saveUninitialized: true,
   cookie: { secure: true }
 }));
