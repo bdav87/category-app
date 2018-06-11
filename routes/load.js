@@ -4,6 +4,11 @@ const router = express.Router();
 const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
 
+router.use(session({
+    secret: 'whatever',
+    resave: false
+}))
+
 router.get('/', (req, res) => {
 
     function initiateVerification(payload) {

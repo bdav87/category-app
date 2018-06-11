@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const session = require('express-session');
 const BigCommerce = require('node-bigcommerce');
 
 const mysql = require('mysql');
@@ -11,7 +10,6 @@ class AuthEmitter extends EventEmitter {}
 const authEmitter = new AuthEmitter();
 
 router.get('/', (req, res) => {
-    console.log("session exists?", req.session)
     console.log('Auth GET');
     receiveAuthFromBC(req.query);
 
@@ -129,9 +127,6 @@ router.get('/', (req, res) => {
         }
 
         function routeUserAfterAuth(){
-            req.session.validated = true;
-            req.session.storehash = bcDetails.storeHash;
-            console.log(req.session);
             res.redirect('/');
         }
 
