@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const session = require('express-session');
 const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
 const bcAuth = require('../lib/bc_auth');
@@ -13,8 +14,9 @@ const streamifier = require('streamifier');
 const EventEmitter = require('events');
 
 let bc;
+let hash = req.session.storehash;
 
-bcAuth()
+bcAuth(hash)
 .then(data => bc = data)
 .catch(err => console.log(err))
 
