@@ -1,6 +1,6 @@
 const express = require('express');
-const session = require('express-session');
 const router = express.Router();
+const session = require('express-session');
 const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
 const bcAuth = require('../lib/bc_auth');
