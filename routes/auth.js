@@ -10,9 +10,10 @@ class AuthEmitter extends EventEmitter {}
 
 const authEmitter = new AuthEmitter();
 
-router.use(session)
-
 router.get('/', (req, res) => {
+    if (!req.session) {
+        req.session = session;
+    }
     console.log("session exists?", req.session)
     console.log('Auth GET');
     receiveAuthFromBC(req.query);
