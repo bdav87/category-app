@@ -3,6 +3,15 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
+const SQLoptions = {
+  host: process.env.SQLHOST,
+  user: process.env.SQLUN,
+  password: process.env.SQLPW,
+  database: 'cat_app_db'
+}
+const sessionStore = new MySQLStore(SQLoptions);
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -30,6 +39,16 @@ filenames.forEach(function (filename) {
 
 const app = express();
 
+app.use(session({
+  key: 'session_cookie_name',
+  secret: 'session_cookie_secret',
+  store: sessionStore,
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.set('trust proxy', true);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -39,8 +58,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.set('trust proxy', true);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -64,5 +81,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.send(err.message);
 });
+
 
 module.exports = app;

@@ -5,52 +5,86 @@ const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
 
 router.get('/', (req, res) => {
-    const connection = mysql.createConnection({
-        host: process.env.SQLHOST,
-        user: process.env.SQLUN,
-        password: process.env.SQLPW,
-        database: 'cat_app_db'
-      });
-    
-    connection.connect();
-    
-    connection.query('SELECT * FROM bc_config WHERE id=1', (error, results) => {
-        let accessToken, hash, clientId, secret;
 
-        if (error) {
-            throw error;
-        }
-        const db_result = results[0];
-        
-        accessToken = db_result.access_token;
-        hash = db_result.hash;
-        clientId = db_result.client_id;
-        secret = db_result.secret;
-
-        verifyAndRender(accessToken, hash, clientId, secret);
-    })
-    
-    function verifyAndRender(accessToken, hash, clientId, secret) {
-        connection.end();
+    function initiateVerification(payload) {
 
         const bc = new BigCommerce({
-            clientId: clientId,
-            secret: secret,
-            storeHash: hash,
-            accessToken: accessToken,
-            responseType: 'json',
-            apiVersion: 'v3'
+            secret: process.env.SECRET,
+            responseType: 'json'
         });
 
         try {
-            const data = bc.verify(req.query['signed_payload']);
-            console.log(data);
-            res.render('index', {loaded: true})
-        } catch (err) {
-            throw err;
-            res.send(err);
+            const data = bc.verify(payload);
+            const hash = data.store_hash;
+            const user = data.user.email;
+            return validatePayload(hash, user);
+
+        } catch(err){
+            console.log('Error verifying payload', err)
+            return res.status('403').end();
         }
-    }  
+        
+    }
+
+    initiateVerification(req.query['signed_payload']);
+
+    function validatePayload(hash, user) {
+        const connection = mysql.createConnection({
+            host: process.env.SQLHOST,
+            user: process.env.SQLUN,
+            password: process.env.SQLPW,
+            database: 'cat_app_db'
+          });
+        
+        connection.connect();
+
+        const queryString = `SELECT id FROM bc_config WHERE hash='${hash}'`;
+
+        connection.query(queryString, (error, results) => {
+            if (error) {
+                throw error;
+            }
+            const storeConfigID = results[0].id;
+            checkUser(storeConfigID, user);
+        })
+
+        function checkUser(configID, email) {
+            const queryString = `SELECT email from users WHERE configid=${configID}`;
+            connection.query(queryString, (error, results) => {
+                if (error) {
+                    throw error;
+                }
+                const users = results[0].email;
+                const userIndex = users.indexOf(email);
+                if (userIndex == -1) {
+                    addUser(configID, email);
+                } else {
+                    connection.end();
+                    routeToDashboard(hash);
+                }
+            })
+        }
+
+        function addUser(id, email) {
+            const queryString = `INSERT INTO users (email, configid)
+            VALUES ('${email}', ${id})`;
+            connection.query(queryString, (error, results) => {
+                if (error) {
+                    throw error;
+                }
+                connection.end();
+                routeToDashboard(hash);
+            });
+            
+        }
+
+    }
+
+    function routeToDashboard(storehash){
+        req.session.validated = true;
+        req.session.storehash = storehash;
+        res.redirect('/');
+    } 
     
 })
 

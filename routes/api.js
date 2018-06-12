@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const session = require('express-session');
 const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
 const bcAuth = require('../lib/bc_auth');
@@ -12,14 +13,17 @@ const upload = multer({limits: {files: 1, fileSize: 1000000}, storage: storage }
 const streamifier = require('streamifier');
 const EventEmitter = require('events');
 
-let bc;
-
-bcAuth()
-.then(data => bc = data)
-.catch(err => console.log(err))
-
 // TEST ROUTE to generate a category
 router.get('/single', (req,res) => {
+    let bc;
+    let hash = req.session.storehash;
+
+    bcAuth(hash)
+    .then(data => {
+        bc = data;
+        createSampleCategory(bc);
+    })
+    .catch(err => console.log(err))
 
     function createSampleCategory(bc_api) {
         let category = {
@@ -31,15 +35,21 @@ router.get('/single', (req,res) => {
         .then(data => res.send(data))
         .catch(err => res.send(`There was an error: ${err}.}`))
     }
-
-    if (bc) {
-        createSampleCategory(bc);
-    }
     
 })
 // When a user hits the export button all categories
 // will be exported into a CSV file
 router.get('/export', (req, res) => {
+    console.log("session:",req.session);
+    let hash = req.session.storehash;
+    let bc;
+
+    bcAuth(hash)
+    .then(data => {
+        bc = data;
+        exportCategories(bc, '?page=1&limit=250')
+    })
+    .catch(err => console.log(err))
 
     let date = new Date().toDateString().split(' ').join('');
     let filename = `category-export-${date}.csv`;
@@ -107,15 +117,13 @@ router.get('/export', (req, res) => {
         
         
     }
-
-    if (bc) {
-        exportCategories(bc, '?page=1&limit=250');
-    }
 })
 
 //Import a CSV and create categories
 let importResults = {started: false};
 router.post('/import', upload.single('csvFile'), (req, res) => {
+    let hash = req.session.storehash;
+    let bc;
     let uploadedCSV = streamifier.createReadStream(req.file.buffer);
     let csvStream = csv;
     let categoryArray = [];
@@ -137,7 +145,10 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 
     csvStream
     .fromStream(uploadedCSV, {headers: headers})
-    .on('error', err => res.status('400').send('Error: CSV is not in expected format\nCheck instructions for format help.'))
+    .on('error', err => {
+        importResults.started = false;
+        res.status('400').send('Error: CSV is not in expected format\nCheck instructions for format help.');
+    })
     .on('data', data=>readyCategories(data))
     .on('end', ()=> uploadProcess.emit('done', categoryArray));
 
@@ -155,15 +166,18 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     }
 
     uploadProcess.on('done', (categories)=> {
-        createCategories(categories, bc);
+        bcAuth(hash)
+        .then(data => {
+            bc = data;
+            createCategories(categories, bc);
+        })
+        .catch(err => console.log(err))
     });
 
     function createCategories(categories, bc) {
         const count = categories.length - 1;
-        if (bc) {
-            res.send({"import": "started"});
-            writeCategoryToBC(categories, count, 1);
-        }
+        res.send({"import": "started"});
+        writeCategoryToBC(categories, count, 1);
     }
 
     function writeCategoryToBC(queue, count, index){
