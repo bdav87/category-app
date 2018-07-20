@@ -193,7 +193,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
         //Convert data from CSV into acceptable format for BC API
 
         newCategory = {
-            'parent_id': data['Parent ID'],
+            'parent_id': data['Parent ID'] || 0,
             'name': data['Category Name'],
             'description': data['Category Description'],
             'sort_order': data['Sort Order'],
