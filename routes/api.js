@@ -138,21 +138,21 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     };
     //ignoring id for now in headers
     //TODO: handle ID and default product sort
-    const headers = [ , 'parent_id', 'name', 'description', 'sort_order', 'page_title', 'meta_keywords', 'meta_description', 'image_url', 'is_visible', 'search_keywords'];
+    //const headers = [ , 'parent_id', 'name', 'description', 'sort_order', 'page_title', 'meta_keywords', 'meta_description', 'image_url', 'is_visible', 'search_keywords'];
 
     class UploadProcess extends EventEmitter {}
     const uploadProcess = new UploadProcess();
 
     csvStream
-    .fromStream(uploadedCSV, {headers: headers})
+    .fromStream(uploadedCSV, {headers: true})
     .on('error', err => {
         importResults.started = false;
         res.status('400').send('Error: CSV is not in expected format\nCheck instructions for format help.');
     })
-    .on('data', data=>readyCategories(data))
+    .on('data', data=>prepareCategories(data))
     .on('end', ()=> uploadProcess.emit('done', categoryArray));
 
-    function readyCategories(data){
+    function prepareCategories(data){
         //Convert data from CSV into acceptable format for BC API
         data['meta_keywords'] = [data['meta_keywords']];
 
@@ -177,7 +177,8 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     function createCategories(categories, bc) {
         const count = categories.length - 1;
         res.send({"import": "started"});
-        writeCategoryToBC(categories, count, 1);
+        console.log(categories);
+        //writeCategoryToBC(categories, count, 1);
     }
 
     function writeCategoryToBC(queue, count, index){
