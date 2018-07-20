@@ -129,7 +129,7 @@ router.get('/export', (req, res) => {
                         'Search Keywords': category['search_keywords'],
                         'Default Product Sort': category['default_product_sort'],
                         'Category URL': category['custom_url']['url'],
-                        'Custom URL': category['custom_url']['is_customized'],
+                        'Custom URL': stringToYesNo(category['custom_url']['is_customized']),
                     }
                 }
 
@@ -223,7 +223,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
         const count = categories.length - 1;
         res.send({'import': 'started'});
         console.log(categories);
-        //writeCategoryToBC(categories, count, 1);
+        writeCategoryToBC(categories, count, 1);
     }
 
     function writeCategoryToBC(queue, count, index){
