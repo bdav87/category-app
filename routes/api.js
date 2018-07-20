@@ -13,6 +13,22 @@ const upload = multer({limits: {files: 1, fileSize: 1000000}, storage: storage }
 const streamifier = require('streamifier');
 const EventEmitter = require('events');
 
+function stringToYesNo(string) {
+    if (string.toString().toLowerCase() == 'true') {
+        return 'Y';
+    } else {
+        return 'N';
+    }
+}
+
+function yesNoToBoolean(string) {
+    if (string.toLowerCase() == 'y') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // TEST ROUTE to generate a category
 router.get('/single', (req,res) => {
     let bc;
@@ -100,22 +116,24 @@ router.get('/export', (req, res) => {
 
                 function formatExportContent(category) {
                     return {
-                        'ID': parseInt(category['id']),
+                        'Category ID': parseInt(category['id']),
                         'Parent ID': parseInt(category['parent_id']),
-                        'Name': category['name'],
-                        'Description': category['description'],
+                        'Category Name': category['name'],
+                        'Category Description': category['description'],
                         'Sort Order': category['sort_order'],
                         'Page Title': category['page_title'],
                         'Meta Keywords': category['meta_keywords'],
                         'Meta Description': category['meta_description'],
-                        'Image URL': category['image_url'],
-                        'Visible': category['is_visible'],
+                        'Category Image URL': category['image_url'],
+                        'Category Visible': stringToYesNo(category['is_visible']),
                         'Search Keywords': category['search_keywords'],
                         'Default Product Sort': category['default_product_sort'],
+                        'Category URL': category['custom_url']['url'],
                         'Custom URL': category['custom_url']['is_customized'],
-                        'URL': category['custom_url']['url']
                     }
                 }
+
+                
         }
 
         determinePageForCSV(category_list);
@@ -173,15 +191,23 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 
     function prepareCategories(data){
         //Convert data from CSV into acceptable format for BC API
-        data['meta_keywords'] = [data['meta_keywords']];
 
-        if (data['is_visible'].toLowerCase() == 'true') {
-            data['is_visible'] = true;
-        } else {
-            data['is_visible'] = false;
+        newCategory = {
+            'parent_id': data['Parent ID'],
+            'name': data['Category Name'],
+            'description': data['Category Description'],
+            'sort_order': data['Sort Order'],
+            'page_title': data['Page Title'],
+            'meta_keywords': [data['Meta Keywords']],
+            'meta_description': data['Meta Description'],
+            'image_url': data['Category Image URL'],
+            'is_visible': yesNoToBoolean(data['Category Visible']),
+            'search_keywords': data['Search Keywords'],
+            'default_product_sort': data['Default Product Sort'],
+            'category_url': data['Category URL']
         }
 
-        return categoryArray.push(data);
+        return categoryArray.push(newCategory);
     }
 
     uploadProcess.on('done', (categories)=> {
