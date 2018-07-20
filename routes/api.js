@@ -40,7 +40,7 @@ router.get('/single', (req,res) => {
 // When a user hits the export button all categories
 // will be exported into a CSV file
 router.get('/export', (req, res) => {
-    console.log("session:",req.session);
+    console.log('session:',req.session);
     let hash = req.session.storehash;
     let bc;
 
@@ -81,20 +81,39 @@ router.get('/export', (req, res) => {
 
                 function writeToCSV(element, index, array){
                     if (index == array.length - 1) {
-                        csvStream.write(element);
+                        csvStream.write(formatExportContent(element));
                         const path = meta.links.next;
 
                         exportCategories(bc, path);
                     } else {
-                        csvStream.write(element);
+                        csvStream.write(formatExportContent(element));
                     }
                 }
                 function writeAndPublishCSV(element, index, array) {
                     if (index == array.length - 1) {
-                        csvStream.write(element);
+                        csvStream.write(formatExportContent(element));
                         sendCSV();
                     } else {
-                        csvStream.write(element);
+                        csvStream.write(formatExportContent(element));
+                    }
+                }
+
+                function formatExportContent(category) {
+                    return {
+                        'ID': parseInt(category['id']),
+                        'Parent ID': parseInt(category['parent_id']),
+                        'Name': category['name'],
+                        'Description': category['description'],
+                        'Sort Order': category['sort_order'],
+                        'Page Title': category['page_title'],
+                        'Meta Keywords': category['meta_keywords'],
+                        'Meta Description': category['meta_description'],
+                        'Image URL': category['image_url'],
+                        'Visible': category['is_visible'],
+                        'Search Keywords': category['search_keywords'],
+                        'Default Product Sort': category['default_product_sort'],
+                        'Custom URL': category['custom_url']['is_customized'],
+                        'URL': category['custom_url']['url']
                     }
                 }
         }
@@ -176,7 +195,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 
     function createCategories(categories, bc) {
         const count = categories.length - 1;
-        res.send({"import": "started"});
+        res.send({'import': 'started'});
         console.log(categories);
         //writeCategoryToBC(categories, count, 1);
     }
@@ -222,7 +241,7 @@ router.get('/progress', (req, res) => {
 
 router.get('/restart', (req, res) => {
     importResults.started = false;
-    res.send({"acknowledged": true})
+    res.send({'acknowledged': true})
 })
 
 
