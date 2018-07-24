@@ -215,7 +215,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 
     function checkForExistingCategory(category) {
         const name = category['name'];
-        return bc.get(`/catalog/categories?name=${name}`);
+        return bc.get(`/catalog/categories?name=${encodeURIComponent(name)}`);
     }
     
     function updateExistingCategory(categoryToUpdate, categoryData) {
