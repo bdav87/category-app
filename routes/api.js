@@ -1,10 +1,5 @@
 const express = require('express');
 const router = express.Router();
-/*
-const session = require('express-session');
-const BigCommerce = require('node-bigcommerce');
-const mysql = require('mysql');
-*/
 const bcAuth = require('../lib/bc_auth');
 const csv = require('fast-csv');
 const fs = require('fs');
@@ -215,7 +210,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     function initImport(categories) {
         const count = categories.length - 1;
         res.send({'import': 'started'});
-        iterateCategories(categories, count, 1);
+        iterateCategories(categories, count, 0);
     }
 
     function checkForExistingCategory(category) {
