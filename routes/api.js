@@ -137,6 +137,14 @@ router.get('/export', (req, res) => {
                     if (err) {
                         console.log(`csv send err: ${err}`)
                     }
+                    else {
+                        fs.unlink(filename, (err) => {
+                            if (err) {
+                                throw err;
+                            }
+                            console.log(`${filename} removed after download`)
+                        });
+                    }
                 });
             });
         }
