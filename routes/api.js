@@ -236,9 +236,11 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
                     let categoryToUpdate = apiResponse.data.filter(existingCategory => {
                         return existingCategory['parent_id'] == categoryToImport['parent_id'];
                     });
+                    console.log('Updating category: ', categoryToUpdate[0]);
                     return updateExistingCategory(categoryToUpdate[0], categoryToImport);
                 }
                 else {
+                    console.log('Creating new category: ', apiResponse.data)
                     return createNewCategory(categoryToImport);
                 }
             })
