@@ -198,7 +198,6 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
             }
         }
             
-        }
         return categoryArray.push(newCategory);
     }
 
