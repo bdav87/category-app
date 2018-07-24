@@ -219,7 +219,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     }
     
     function updateExistingCategory(categoryToUpdate, categoryData) {
-        return bc.put(`/catalog/categories$${categoryToUpdate['id']}`, categoryData);
+        return bc.put(`/catalog/categories/${categoryToUpdate['id']}`, categoryData);
     }
 
     function createNewCategory(category) {
