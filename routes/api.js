@@ -189,11 +189,15 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
             'image_url': data['Category Image URL'],
             'is_visible': yesNoToBoolean(data['Category Visible']),
             'search_keywords': data['Search Keywords'],
-            'default_product_sort': data['Default Product Sort'] || 'use_store_settings',
-            'custom_url': {
-                'url': data['Category URL'] || null,
-                'is_customized': yesNoToBoolean(data['Custom URL']) || null
+            'default_product_sort': data['Default Product Sort'] || 'use_store_settings'
+        }
+        if (data['Category URL'] && data['Custom URL']) {
+            newCategory['custom_url'] = {
+                'url': data['Category URL'],
+                'is_customized': yesNoToBoolean(data['Custom URL'])
             }
+        }
+            
         }
         return categoryArray.push(newCategory);
     }
