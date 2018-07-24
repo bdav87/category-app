@@ -232,7 +232,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
         if (index <= count) {
             checkForExistingCategory(categoryToImport)
             .then(apiResponse => {
-                if (apiResponse.data.length > 1) {
+                if (apiResponse.data.length >= 1) {
                     let categoryToUpdate = apiResponse.data.filter(existingCategory => {
                         return existingCategory['parent_id'] == categoryToImport['parent_id'];
                     });
