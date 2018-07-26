@@ -187,12 +187,12 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
             'parent_id': parseInt(data['Parent ID']) || 0,
             'name': data['Category Name'],
             'description': data['Category Description'],
-            'sort_order': parseInt(data['Sort Order']),
+            'sort_order': parseInt(data['Sort Order']) || 0,
             'page_title': data['Page Title'],
             'meta_keywords': [data['Meta Keywords']],
             'meta_description': data['Meta Description'],
             'image_url': data['Category Image URL'],
-            'is_visible': yesNoToBoolean(data['Category Visible']),
+            'is_visible': yesNoToBoolean(data['Category Visible']) || true,
             'search_keywords': data['Search Keywords'],
             'default_product_sort': data['Default Product Sort'] || 'use_store_settings'
         }
