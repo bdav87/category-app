@@ -14,11 +14,11 @@ const SQLoptions = {
 const sessionStore = new MySQLStore(SQLoptions);
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
 const loadRouter = require('./routes/load');
 const uninstallRouter = require('./routes/uninstall');
 const apiRouter = require('./routes/api');
+const removeUserRouter = require('./routes/remove-user');
 
 const fs = require('fs');
 const hbs = require('hbs');
@@ -60,11 +60,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/load', loadRouter);
 app.use('/uninstall', uninstallRouter);
 app.use('/api', apiRouter);
+app.use('/remove-user', removeUserRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
