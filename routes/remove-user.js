@@ -34,9 +34,9 @@ router.get('/', (req, res) => {
 
         connection.query(`
             DELETE FROM cat_app_db.users WHERE configid=(
-            SELECT id from cat_app_db.bc_config WHERE hash=${hash}
+            SELECT id from cat_app_db.bc_config WHERE hash='${hash}'
             )
-            AND email=${user}`, (error, result) => {
+            AND email='${user}'`, (error, result) => {
                 if (error) {
                     console.log(`Unable to remove user. Error: ${error}`);
                 }
