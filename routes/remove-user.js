@@ -40,10 +40,13 @@ router.get('/', (req, res) => {
                 if (error) {
                     console.log(`Unable to remove user. Error: ${error}`);
                 }
+                if (result) {
+                    console.log(`Successfully removed user ${user}`);
+                }
             });
         
         connection.end();
-        
+        res.status('200');
     }
 
 })
