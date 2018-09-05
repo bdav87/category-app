@@ -126,7 +126,7 @@ router.get('/', (req, res) => {
 
         function routeUserAfterAuth(){
             req.session.validated = true;
-            req.session.storehash = storehash;
+            req.session.storehash = bcDetails.storeHash;
             res.redirect('/');
         }
 
