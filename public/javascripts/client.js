@@ -17,10 +17,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
     function pollProgress(){
       $.get('/api/progress', (data) => {
+        $('#importProgress > .progress-bar').css({'width': `${data.progress}%`}).text(`${data.progress}%`);
         if (data.complete == false) {
           $('#importSuccessCount').text(data.successful);
           $('#importFailCount').text(data.failed);
-          $('#importProgress > .progress-bar').css({'width': `${data.progress}%`}).text(`${data.progress}%`);
           return importUI();
         }
         if (data.complete == true) {
