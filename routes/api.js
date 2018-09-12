@@ -8,6 +8,8 @@ const storage = multer.memoryStorage();
 const upload = multer({limits: {files: 1, fileSize: 1000000}, storage: storage });
 const streamifier = require('streamifier');
 const EventEmitter = require('events');
+const dotenv = require('dotenv');
+dotenv.config();
 
 function stringToYesNo(string) {
 	if (string.toString().toLowerCase() == 'true') {
@@ -279,6 +281,9 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 
 //A route to poll the progress of the import
 router.get('/progress', (req, res) => {
+	if (process.env.DEVELOPMENT == 'true') {
+		importResults.started = true;
+	}
 	res.send(importResults);
 });
 

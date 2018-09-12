@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function(){
       } 
       if (data.started) {
         $('#dropTarget').hide();
-        $('#importProgressArea').show();
+        $('#importProgressArea').css({'display':'flex'});
         return importUI();
       }
     });
@@ -20,13 +20,12 @@ document.addEventListener('DOMContentLoaded', function(){
         if (data.complete == false) {
           $('#importSuccessCount').text(data.successful);
           $('#importFailCount').text(data.failed);
-          $('#importProgress').text(`${data.progress}%`);
+          $('#importProgress > .progress-bar').css({'width': `${data.progress}%`}).text(`${data.progress}%`);
           return importUI();
         }
         if (data.complete == true) {
           $('#importSuccessCount').text(data.successful);
           $('#importFailCount').text(data.failed);
-          $('#importProgress').text('100%');
           $('#progressHeading').text('Completed');
           $('#restartLink').show().click(() => {
             $.get('/api/restart', (data) => {
