@@ -11,7 +11,7 @@ router.get('/', function(req, res) {
     if (req.session.validated && req.session.storehash) {
       res.render('index', { loaded: true });
     } 
-    if (process.env.DEVELOPMENT == 'true') {
+    else if (process.env.DEVELOPMENT == 'true') {
       res.render('index', { loaded: true });
     } else {
       res.status('403').end();
