@@ -247,6 +247,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 
 	function iterateCategories(queue, count, index){
 		let categoryToImport = queue[index];
+		importResults.progress = [`${index}/${count}`, Math.round(index / count * 100)];
 
 		if (index <= count) {
 			checkForExistingCategory(categoryToImport)
@@ -271,13 +272,12 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 				.then(data => { 
 					importResults.created.count++; 
 					index++;
-					importResults.progress = [`${index}/${count}`, Math.round(index / count * 100)];
 					iterateCategories(queue, count, index);
 				})
 				.catch(err => {
-					console.log(err);
+					let message = err;
+					console.log(message);
 					let failureMessage = `Unable to write category ${categoryToImport['name']}: ${JSON.stringify(err)}`
-					importResults.progress = [`${index}/${count}`, Math.round(index / count * 100)];
 					importResults.failed.count++;
 					importResults.failed.messages.push(failureMessage);
 					index++;
