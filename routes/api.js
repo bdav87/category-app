@@ -276,8 +276,9 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 				})
 				.catch(err => {
 					console.log(err.message);
-					let indexer = err.message.indexOf('body:');
-					let newErr = err.message.split(indexer+5);
+					let messaging = err.message.toString();
+					let indexer = messaging.indexOf('body:');
+					let newErr = messaging.split(indexer+5);
 					console.log(newErr);
 					let failureMessage = `Unable to write category ${categoryToImport['name']}: ${JSON.stringify(err.message)}`
 					importResults.failed.count++;
