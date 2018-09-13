@@ -270,16 +270,16 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 				})
 				.then(data => { 
 					importResults.created.count++; 
-					importResults.progress = [`${index}/${count}`, Math.round(index / count * 100)];
 					index++;
+					importResults.progress = [`${index}/${count}`, Math.round(index / count * 100)];
 					iterateCategories(queue, count, index);
 				})
 				.catch(err => {
 					console.log(err);
 					importResults.failed.count++;
-					importResults.messages.push(err);
-					importResults.progress = [`${index}/${count}`, Math.round(index / count * 100)];
 					index++;
+					importResults.failed.messages.push(err);
+					importResults.progress = [`${index}/${count}`, Math.round(index / count * 100)];
 					iterateCategories(queue, count, index);
 				});
 		}
