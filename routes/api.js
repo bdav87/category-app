@@ -247,7 +247,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 
 	function iterateCategories(queue, count, index){
 		let categoryToImport = queue[index];
-		importResults.progress = [`${index < count ? index:count}/${count}`, Math.round(index / count * 100)];
+		importResults.progress = [`${index < count ? index + 1:count + 1}/${count + 1}`, Math.round(index / count * 100)];
 
 		if (index <= count) {
 			checkForExistingCategory(categoryToImport)
