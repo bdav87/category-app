@@ -162,11 +162,21 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 	let categoryArray = [];
 
 	importResults = {
-		successful: 0, 
-		failed: 0, 
+		created: {
+			count: 0,
+			messages: []
+		},
+		updated: {
+			count: 0,
+			messages: []
+		},
+		failed: {
+			count: 0,
+			messages: []
+		}, 
 		complete: false, 
 		started: true,
-		progress: 0,
+		progress: [],
 		acknowledged: false
 	};
 
@@ -259,15 +269,16 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 					}
 				})
 				.then(data => { 
-					importResults.successful++; 
-					importResults.progress = Math.round(index / count * 100);
+					importResults.created.count++; 
+					importResults.progress = [`${index}/${count}`, Math.round(index / count * 100)];
 					index++;
 					iterateCategories(queue, count, index);
 				})
 				.catch(err => {
 					console.log(err);
-					importResults.failed++;
-					importResults.progress = Math.round(index / count * 100);
+					importResults.failed.count++;
+					importResults.messages.push(err);
+					importResults.progress = [`${index}/${count}`, Math.round(index / count * 100)];
 					index++;
 					iterateCategories(queue, count, index);
 				});

@@ -30,6 +30,10 @@ nav {
   border-bottom: 4px solid #4b71fc !important;
 }
 
+.visible {
+  display: block !important;
+}
+
 .dropzone {
   border-radius: 12px;
   border: 2px dashed #d4d4d4;
@@ -89,7 +93,6 @@ nav {
 #importProgressArea {
   display: none;
   color: #000;
-  text-align: center;
   justify-content: center;
   flex-direction: column;
 }
@@ -98,5 +101,11 @@ nav {
   display: none;
 }
 #importAlert {
+  display: none;
+}
+#importErrors {
+  height: 18rem;
+  overflow: auto;
+  resize: none;
   display: none;
 }
