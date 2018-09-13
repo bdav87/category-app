@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function(){
         $('#importCount').text(data.progress[0]);
         $('#importProcessed').text(data.created.count);
         $('#importErrorCount').text(data.failed.count);
-        $('#importErrors').val(data.failed.messages);
+        $('#importErrors').val(parseErrors(data.failed.messages));
         if (data.complete == false) {
           return importPollingCycle();
         }
@@ -47,6 +47,10 @@ document.addEventListener('DOMContentLoaded', function(){
           });
         }
       })
+    }
+
+    function parseErrors(errors) {
+      return errors.join('\n');
     }
 
     //Prepare the import area when it is present.
