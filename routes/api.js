@@ -227,7 +227,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 	});
 
 	function initImport(categories) {
-		const count = categories.length - 1;
+		const count = categories.length;
 		res.send({'import': 'started'});
 		iterateCategories(categories, count, 0);
 	}
