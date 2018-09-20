@@ -5,28 +5,36 @@ document.addEventListener('DOMContentLoaded', function(){
         $('#importProgressArea').hide();
       } 
       if (data.started) {
-        $('#dropTarget').hide();
-        $('#importProgressArea').show();
-        return importUI();
+        prepareImportUI();
       }
     });
 
-    function importUI(){
+    function prepareImportUI() {
+      $('#dropTarget').hide();
+      $('#importProgressArea').css({'display':'flex'});
+      $('#importErrorLink').click(function(e) {
+        e.preventDefault();
+        $('#importErrors').toggleClass('visible');
+      });
+
+      return importPollingCycle();
+    }
+
+    function importPollingCycle(){
       setTimeout(pollProgress, 1000);
     }
 
     function pollProgress(){
       $.get('/api/progress', (data) => {
+        $('#importProgress > .progress-bar').css({'width': `${data.progress[1]}%`}).text(`${data.progress[1]}%`);
+        $('#importCount').text(data.progress[0]);
+        $('#importProcessed').text(data.created.count);
+        $('#importErrorCount').text(data.failed.count);
+        $('#importErrors').val(parseErrors(data.failed.messages));
         if (data.complete == false) {
-          $('#importSuccessCount').text(data.successful);
-          $('#importFailCount').text(data.failed);
-          $('#importProgress').text(`${data.progress}%`);
-          return importUI();
+          return importPollingCycle();
         }
         if (data.complete == true) {
-          $('#importSuccessCount').text(data.successful);
-          $('#importFailCount').text(data.failed);
-          $('#importProgress').text('100%');
           $('#progressHeading').text('Completed');
           $('#restartLink').show().click(() => {
             $.get('/api/restart', (data) => {
@@ -39,6 +47,10 @@ document.addEventListener('DOMContentLoaded', function(){
           });
         }
       })
+    }
+
+    function parseErrors(errors) {
+      return errors.join('\n');
     }
 
     //Prepare the import area when it is present.

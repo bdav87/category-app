@@ -8,6 +8,8 @@ const storage = multer.memoryStorage();
 const upload = multer({limits: {files: 1, fileSize: 1000000}, storage: storage });
 const streamifier = require('streamifier');
 const EventEmitter = require('events');
+const dotenv = require('dotenv');
+dotenv.config();
 
 function stringToYesNo(string) {
 	if (string.toString().toLowerCase() == 'true') {
@@ -160,11 +162,21 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 	let categoryArray = [];
 
 	importResults = {
-		successful: 0, 
-		failed: 0, 
+		created: {
+			count: 0,
+			messages: []
+		},
+		updated: {
+			count: 0,
+			messages: []
+		},
+		failed: {
+			count: 0,
+			messages: []
+		}, 
 		complete: false, 
 		started: true,
-		progress: 0,
+		progress: [],
 		acknowledged: false
 	};
 
@@ -215,9 +227,9 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 	});
 
 	function initImport(categories) {
-		const count = categories.length - 1;
+		const count = categories.length;
 		res.send({'import': 'started'});
-		iterateCategories(categories, count, 0);
+		iterateCategories(categories, count - 1, 0);
 	}
 
 	function checkForExistingCategory(category) {
@@ -235,6 +247,7 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 
 	function iterateCategories(queue, count, index){
 		let categoryToImport = queue[index];
+		importResults.progress = [`${index < count ? index : count + 1}/${count + 1}`, Math.round(index / count * 100)];
 
 		if (index <= count) {
 			checkForExistingCategory(categoryToImport)
@@ -257,20 +270,25 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 					}
 				})
 				.then(data => { 
-					importResults.successful++; 
-					importResults.progress = Math.round(index / count * 100);
+					importResults.created.count++; 
 					index++;
 					iterateCategories(queue, count, index);
 				})
 				.catch(err => {
-					console.log(err);
-					importResults.failed++;
-					importResults.progress = Math.round(index / count * 100);
+					console.log(err.message);
+					let messaging = err.message.toString();
+					let indexer = messaging.indexOf('body:');
+					let newErr = messaging.slice(indexer+5).trim();
+					newErr = JSON.parse(newErr).title;
+					let failureMessage = `Unable to write category ${categoryToImport['name']}: ${newErr}`;
+					importResults.failed.count++;
+					importResults.failed.messages.push(failureMessage);
 					index++;
 					iterateCategories(queue, count, index);
 				});
 		}
 		else {
+			importResults.progress[1] = 100;
 			importResults.complete = true;
 		}
 	}
@@ -279,6 +297,9 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 
 //A route to poll the progress of the import
 router.get('/progress', (req, res) => {
+	if (process.env.DEVELOPMENT == 'true') {
+		importResults.started = true;
+	}
 	res.send(importResults);
 });
 
