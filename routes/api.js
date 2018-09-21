@@ -285,8 +285,8 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
                         importResults.failed.count++;
                         importResults.failed.messages.push(failureMessage);
                         index++;
-                    } catch {
-                        let failureMessage = `Unable to write category ${categoryToImport['name']}: Connection issue`;
+                    } catch (e) {
+                        let failureMessage = `Unable to write category ${categoryToImport['name']}: ${e}`;
                         importResults.failed.count++;
                         importResults.failed.messages.push(failureMessage);
                         index++;
