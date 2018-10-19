@@ -3,8 +3,8 @@ const router = express.Router();
 const session = require('express-session');
 const BigCommerce = require('node-bigcommerce');
 const mysql = require('mysql');
-const dotenv = require('dotenv');
-dotenv.config();
+/* const dotenv = require('dotenv');
+dotenv.config(); */
 
 /* GET home page. */
 router.get('/', function(req, res) {
