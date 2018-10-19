@@ -189,8 +189,8 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
             importResults.started = false;
             res.status('400').send('Error: CSV is not in expected format\nCheck instructions for format help.');
         })
-        .on('data', data=>prepareCategories(data))
-        .on('end', ()=> uploadProcess.emit('done', categoryArray));
+        .on('data', data => prepareCategories(data))
+        .on('end', () => uploadProcess.emit('done', categoryArray));
 
     //Convert data from CSV into acceptable format for BC API
     function prepareCategories(data) {
@@ -261,11 +261,9 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
                         if (categoryToUpdate.length < 1) {
                             return createNewCategory(categoryToImport);
                         }
-                        console.log('Updating category: ', categoryToUpdate[0]);
                         return updateExistingCategory(categoryToUpdate[0], categoryToImport);
                     }
-                    else {
-                        console.log('Creating new category: ', apiResponse.data);
+                    else { 
                         return createNewCategory(categoryToImport);
                     }
                 })
@@ -275,18 +273,18 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
                     iterateCategories(queue, count, index);
                 })
                 .catch(err => {
-                    console.log(err.message);
+                    console.log(err);
                     let messaging = err.message.toString();
                     let indexer = messaging.indexOf('body:');
                     let newErr = messaging.slice(indexer+5).trim();
                     try {
                         newErr = JSON.parse(newErr).title;
-                        let failureMessage = `Unable to write category ${categoryToImport['name']}: ${newErr}`;
+                        let failureMessage = `Error ${categoryToImport['name']}: ${newErr}`;
                         importResults.failed.count++;
                         importResults.failed.messages.push(failureMessage);
                         index++;
                     } catch (e) {
-                        let failureMessage = `Unable to write category ${categoryToImport['name']}: ${e}`;
+                        let failureMessage = `Error ${categoryToImport['name']}: Connection error`;
                         importResults.failed.count++;
                         importResults.failed.messages.push(failureMessage);
                         index++;
