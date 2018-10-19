@@ -91,9 +91,7 @@ router.get('/', (req, res) => {
                 if (error) {
                     console.log("error adding store details to db: ", error)
                 }
-                const db_result = results[0];
-                console.log('add new store result', db_result);
-                authEmitter.emit('storeAdded');
+                authEmitter.emit('storeAdded', results.insertId);
             })
         }
 
