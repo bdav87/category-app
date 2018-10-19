@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
             logLevel: 'info',
             clientId: process.env.CLIENTID,
             secret: process.env.SECRET,
-            callback: 'https://category-app.dreamhosters.com/auth',
+            callback: 'https://category-import-export.herokuapp.com/auth',
             responseType: 'json',
             apiVersion: 'v3'
         });
@@ -50,12 +50,7 @@ router.get('/', (req, res) => {
     }
 
     function saveAuthToDB(bcDetails){
-        const connection = mysql.createConnection({
-            host: process.env.SQLHOST,
-            user: process.env.SQLUN,
-            password: process.env.SQLPW,
-            database: 'cat_app_db'
-          });
+        const connection = mysql.createConnection(process.env.JAWSDB_URL);
 
         connection.connect((err) => {
             if (err) {
