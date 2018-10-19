@@ -38,7 +38,7 @@ router.get('/', (req, res) => {
             storeHash: extractHash(data.context),
             user: data.user.email
         }
-        //return saveAuthToDB(bcDetails);
+        return saveAuthToDB(bcDetails);
     }
 
     function extractHash(context) {
