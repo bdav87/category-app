@@ -55,8 +55,9 @@ router.get('/', (req, res) => {
         connection.connect((err) => {
             if (err) {
                 console.log('Error connecting to DB:', err);
+            } else {
+                authEmitter.emit('connected');
             }
-            authEmitter.emit('connected');
         });
         
         // Did this store install the app previously?
