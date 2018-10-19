@@ -70,7 +70,7 @@ router.get('/', (req, res) => {
                     if (error) {
                         console.log("error on hash query: ", error)
                     }
-
+                    console.log("Existing hash results:", results)
                     const id = results[0].id;
 
                     if (id == null) {
