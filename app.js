@@ -6,7 +6,7 @@ var logger = require('morgan');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const SQLoptions = process.env.JAWSDB_URL;
-const sessionStore = new MySQLStore(SQLoptions);
+const sessionStore = new MySQLStore({SQLoptions});
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
