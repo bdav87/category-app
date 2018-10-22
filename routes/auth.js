@@ -49,7 +49,7 @@ router.get('/', (req, res) => {
         return hash;
     }
 
-    function saveAuthToDB(bcDetails){
+    function saveAuthToDB(bcDetails) {
         const connection = mysql.createConnection(process.env.JAWSDB_URL);
 
         connection.connect((err) => {
@@ -120,6 +120,7 @@ router.get('/', (req, res) => {
         }
 
         function routeUserAfterAuth(){
+            connection.end();
             req.session.validated = true;
             req.session.storehash = bcDetails.storeHash;
             res.redirect('/');
