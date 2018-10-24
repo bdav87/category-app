@@ -23,12 +23,7 @@ router.get('/', (req, res) => {
     initiateVerification(req.query['signed_payload']);
 
     function removeUser(user, hash) {
-        const connection = mysql.createConnection({
-            host: process.env.SQLHOST,
-            user: process.env.SQLUN,
-            password: process.env.SQLPW,
-            database: 'cat_app_db'
-          });
+        const connection = mysql.createConnection(process.env.JAWSDB_URL);
         
         connection.connect();
 

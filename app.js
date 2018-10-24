@@ -4,14 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require('express-session');
-const MySQLStore = require('express-mysql-session')(session);
-const SQLoptions = {
-  host: process.env.SQLHOST,
-  user: process.env.SQLUN,
-  password: process.env.SQLPW,
-  database: 'cat_app_db'
-}
-const sessionStore = new MySQLStore(SQLoptions);
+const RedisStore = require('connect-redis')(session);
+const sessionStore = new RedisStore({ url: process.env.REDIS_URL });
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');

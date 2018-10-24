@@ -29,12 +29,8 @@ router.get('/', (req, res) => {
     initiateVerification(req.query['signed_payload']);
 
     function validatePayload(hash, user) {
-        const connection = mysql.createConnection({
-            host: process.env.SQLHOST,
-            user: process.env.SQLUN,
-            password: process.env.SQLPW,
-            database: 'cat_app_db'
-          });
+        console.log('Validating Payload');
+        const connection = mysql.createConnection(process.env.JAWSDB_URL);
         
         connection.connect();
 
@@ -42,7 +38,7 @@ router.get('/', (req, res) => {
 
         connection.query(queryString, (error, results) => {
             if (error) {
-                throw error;
+                console.log(error);
             }
             const storeConfigID = results[0].id;
             checkUser(storeConfigID, user);
@@ -52,7 +48,7 @@ router.get('/', (req, res) => {
             const queryString = `SELECT email from users WHERE configid=${configID}`;
             connection.query(queryString, (error, results) => {
                 if (error) {
-                    throw error;
+                    console.log(error);
                 }
                 const users = results[0].email;
                 const userIndex = users.indexOf(email);
@@ -70,7 +66,7 @@ router.get('/', (req, res) => {
             VALUES ('${email}', ${id})`;
             connection.query(queryString, (error, results) => {
                 if (error) {
-                    throw error;
+                    console.log(error);
                 }
                 connection.end();
                 routeToDashboard(hash);

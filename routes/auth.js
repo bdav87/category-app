@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
             logLevel: 'info',
             clientId: process.env.CLIENTID,
             secret: process.env.SECRET,
-            callback: 'https://category-app.dreamhosters.com/auth',
+            callback: 'https://category-import-export.herokuapp.com/auth',
             responseType: 'json',
             apiVersion: 'v3'
         });
@@ -49,19 +49,15 @@ router.get('/', (req, res) => {
         return hash;
     }
 
-    function saveAuthToDB(bcDetails){
-        const connection = mysql.createConnection({
-            host: process.env.SQLHOST,
-            user: process.env.SQLUN,
-            password: process.env.SQLPW,
-            database: 'cat_app_db'
-          });
+    function saveAuthToDB(bcDetails) {
+        const connection = mysql.createConnection(process.env.JAWSDB_URL);
 
         connection.connect((err) => {
             if (err) {
                 console.log('Error connecting to DB:', err);
+            } else {
+                authEmitter.emit('connected');
             }
-            authEmitter.emit('connected');
         });
         
         // Did this store install the app previously?
@@ -75,13 +71,13 @@ router.get('/', (req, res) => {
                     if (error) {
                         console.log("error on hash query: ", error)
                     }
-
-                    const id = results[0].id;
-
-                    if (id == null) {
+                    console.log("Existing hash results:", results)
+                    
+                    if (results.length < 1) {
                         authEmitter.emit('storeNeeded');
                     }
                     else {
+                        const id = results[0].id;
                         authEmitter.emit('existingHashFound', id);
                     }
                 })
@@ -95,8 +91,7 @@ router.get('/', (req, res) => {
                 if (error) {
                     console.log("error adding store details to db: ", error)
                 }
-                const db_result = results[0];
-                authEmitter.emit('storeAdded');
+                authEmitter.emit('storeAdded', results.insertId);
             })
         }
 
@@ -125,6 +120,7 @@ router.get('/', (req, res) => {
         }
 
         function routeUserAfterAuth(){
+            connection.end();
             req.session.validated = true;
             req.session.storehash = bcDetails.storeHash;
             res.redirect('/');

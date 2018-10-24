@@ -8,8 +8,8 @@ const storage = multer.memoryStorage();
 const upload = multer({limits: {files: 1, fileSize: 1000000}, storage: storage });
 const streamifier = require('streamifier');
 const EventEmitter = require('events');
-const dotenv = require('dotenv');
-dotenv.config();
+/* const dotenv = require('dotenv');
+dotenv.config(); */
 
 function stringToYesNo(string) {
     if (string.toString().toLowerCase() == 'true') {
