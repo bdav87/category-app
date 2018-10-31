@@ -109,3 +109,11 @@ nav {
   resize: none;
   display: none;
 }
+
+#cancelBtn {
+  width: 128px;
+}
+
+#cancelAlert {
+  display: none;
+}
