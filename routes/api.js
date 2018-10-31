@@ -154,6 +154,7 @@ router.get('/export', (req, res) => {
 
 //Import a CSV and create categories
 let importResults = {started: false};
+let cancelled = false;
 router.post('/import', upload.single('csvFile'), (req, res) => {
     let hash = req.session.storehash;
     let bc;
@@ -245,7 +246,12 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
         return bc.post('/catalog/categories', category);
     }
 
-    function iterateCategories(queue, count, index){
+    function iterateCategories(queue, count, index) {
+        if (cancelled === true) {
+            importResults.complete = true;
+            return false;
+        }
+
         let categoryToImport = queue[index];
         importResults.progress = [`${index < count ? index : count + 1}/${count + 1}`, Math.round(index / count * 100)];
 
@@ -312,6 +318,10 @@ router.get('/restart', (req, res) => {
     importResults.started = false;
     res.send({'acknowledged': true});
 });
+
+router.get('/cancel', (req, res) => {
+    return cancelled = true;
+})
 
 
 module.exports = router;

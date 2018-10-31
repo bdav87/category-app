@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', function(){
     function prepareImportUI() {
       $('#dropTarget').hide();
       $('#importProgressArea').css({'display':'flex'});
+      $('#cancelBtn').click(e => {
+        e.preventDefault();
+        $.get('/api/cancel');
+      });
       $('#importErrorLink').click(function(e) {
         e.preventDefault();
         $('#importErrors').toggleClass('visible');
@@ -36,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function(){
         }
         if (data.complete == true) {
           $('#progressHeading').text('Completed');
+          $('#cancelBtn').hide();
           $('#restartLink').show().click(() => {
             $.get('/api/restart', (data) => {
               if (data.acknowledged) {
