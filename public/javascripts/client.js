@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', function(){
       $('#importProgressArea').css({'display':'flex'});
       $('#cancelBtn').click(e => {
         e.preventDefault();
-        $.get('/api/cancel');
+        $.get('/api/cancel')
+        .done(()=> $('#cancelAlert').show());
       });
       $('#importErrorLink').click(function(e) {
         e.preventDefault();

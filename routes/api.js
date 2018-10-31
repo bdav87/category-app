@@ -249,7 +249,6 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
 
     function iterateCategories(queue, count, index) {
         if (cancelled === true) {
-            importResults.complete = true;
             return false;
         }
 
@@ -286,12 +285,12 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
                     let newErr = messaging.slice(indexer+5).trim();
                     try {
                         newErr = JSON.parse(newErr).title;
-                        let failureMessage = `Error ${categoryToImport['name']}: ${newErr}`;
+                        let failureMessage = `Error importing ${categoryToImport['name']}: ${newErr}`;
                         importResults.failed.count++;
                         importResults.failed.messages.push(failureMessage);
                         index++;
                     } catch (e) {
-                        let failureMessage = `Error ${categoryToImport['name']}: Connection error`;
+                        let failureMessage = `Error importing ${categoryToImport['name']}: Connection error`;
                         importResults.failed.count++;
                         importResults.failed.messages.push(failureMessage);
                         index++;
@@ -321,6 +320,7 @@ router.get('/restart', (req, res) => {
 });
 
 router.get('/cancel', (req, res) => {
+    importResults.complete = true;
     return cancelled = true;
 })
 
