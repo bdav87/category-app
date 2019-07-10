@@ -13,6 +13,7 @@ const loadRouter = require('./routes/load');
 const uninstallRouter = require('./routes/uninstall');
 const apiRouter = require('./routes/api');
 const removeUserRouter = require('./routes/remove-user');
+const testRoute = require('./routes/test');
 
 const fs = require('fs');
 const hbs = require('hbs');
@@ -51,7 +52,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'client/build')));
+//app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
@@ -59,6 +61,12 @@ app.use('/load', loadRouter);
 app.use('/uninstall', uninstallRouter);
 app.use('/api', apiRouter);
 app.use('/remove-user', removeUserRouter);
+app.use('/test', testRoute);
+
+// temporary routing for react app
+app.get('*', function (request, response){
+  response.sendFile(path.join(__dirname, 'client/build/index.html'));
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

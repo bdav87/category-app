@@ -65,3 +65,4 @@ typings/
 /test-files
 *.csv
 .vscode
+build

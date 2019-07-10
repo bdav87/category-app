@@ -1,22 +1,31 @@
 const express = require('express');
 const router = express.Router();
-const session = require('express-session');
-const BigCommerce = require('node-bigcommerce');
-const mysql = require('mysql');
-/* const dotenv = require('dotenv');
-dotenv.config(); */
+
+const envFile = '.env';
+const fs = require('fs');
+
+fs.access(envFile, fs.constants.F_OK, (err) => {
+  if (!err) {
+    console.log('Running dev environment')
+    const dotenv = require('dotenv');
+    dotenv.config();
+  }
+});
 
 /* GET home page. */
 router.get('/', function(req, res) {
-    if (req.session.validated && req.session.storehash) {
-      res.render('index', { loaded: true });
+    if (process.env.DEVELOPMENT === 'true') {
+      /* return res.sendFile('index.html'); */
+      return res.render('index', { loaded: true });
+    }
+    if (req.session) {
+      if (req.session.validated && req.session.storehash) {
+        return res.render('index', { loaded: true });
+      }
     } 
-    else if (process.env.DEVELOPMENT == 'true') {
-      res.render('index', { loaded: true });
-    } else {
+    else {
       res.status('403').end();
     }
-    
 });
 
 module.exports = router;
