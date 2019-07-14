@@ -8,7 +8,6 @@ const storage = multer.memoryStorage();
 const upload = multer({limits: {files: 1, fileSize: 1000000}, storage: storage });
 const streamifier = require('streamifier');
 const EventEmitter = require('events');
-const bcDev = require('../lib/bc_dev');
 
 const BoolString = require('../lib/helpers/BoolString');
 const Categories = require('../lib/Categories');
@@ -16,12 +15,13 @@ const CreateAPI = require('../lib/helpers/CreateAPI');
 
 // TEST ROUTE to generate a category
 router.get('/single', (req, res) => {
-    const Category = new Categories;
     if (process.env.DEVELOPMENT) {
         CreateAPI()
         .then(bc => {
-            Category.createSample(bc);
+            const Category = new Categories(bc);
+            return Category.createSample();
         })
+        .then(sampleCategory => res.send(sampleCategory))
         .catch(err => {
             res.send(`There was an error: ${err}.}`);
         })
