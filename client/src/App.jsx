@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import Nav from './nav/Nav';
-import { Route, Switch, Redirect, Link, withRouter } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 import HelpMain from './help/HelpMain';
 import ExportMain from './export/ExportMain';
 import ImportMain from './import/ImportMain';
@@ -18,42 +18,17 @@ class App extends Component {
     this.testclick = () => {
       alert('test')
     }
-    /* this.loadHelp = () => {
-      this.props.history.push('/help')
-      //this.setState({location: 'help'});
-    }
-    this.loadMain = () => {
-      console.log('load main void')
-      //this.setState({location: 'main'})
-    }
-    this.swapViews = (location) => {
-      switch(location) {
-        case 'main':
-          return (
-            <Route exact path='/'>
-            <Nav loadHelp={this.loadHelp} />
-            </Route>
-          );
-        case 'help':
-          return (
-            <div>
-              <Route path='/help'>
-                <HelpMain loadMain={this.loadMain} />
-              </Route>
-            </div>
-          )
-      }
-
-    } */
   }
+
   componentDidMount() {
     fetch('/test')
     .then(response => response.json())
     .then(value => this.setState({test: value.test}))
   }
+
   render() {
-    const { test, location } = this.state;
-  //        {this.swapViews(location)} 
+    const { test } = this.state;
+
     return (
       <div className="App">
         <Route exact path = '/' component={Nav} />

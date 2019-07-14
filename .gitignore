@@ -66,3 +66,4 @@ typings/
 *.csv
 .vscode
 build
+*.txt
