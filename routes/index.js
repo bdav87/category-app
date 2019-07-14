@@ -1,22 +1,14 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 
-const envFile = '.env';
-const fs = require('fs');
-
-fs.access(envFile, fs.constants.F_OK, (err) => {
-  if (!err) {
-    console.log('Running dev environment')
-    const dotenv = require('dotenv');
-    dotenv.config();
-  }
-});
-
-/* GET home page. */
 router.get('/', function(req, res) {
     if (process.env.DEVELOPMENT === 'true') {
-      /* return res.sendFile('index.html'); */
-      return res.render('index', { loaded: true });
+      router.use(express.static(path.join(__dirname, '../client/build')));
+      const options = {
+        root: path.join(__dirname, '../client/build')
+      }
+      return res.sendFile('index.html', options);
     }
     if (req.session) {
       if (req.session.validated && req.session.storehash) {
