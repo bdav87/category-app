@@ -32,94 +32,25 @@ router.get('/single', (req, res) => {
 
 router.get('/export', (req, res) => {
     CreateAPI()
-    .then(bc => exportCategories(bc, '?page=1&limit=250'))
-    .catch(err => console.log('Error initiating export:',err));
-
-    let date = new Date().toDateString().split(' ').join('');
-    let filename = `category-export-${date}.csv`;
-    let csvStream = csv.createWriteStream({headers: true});
-    let writableStream = fs.createWriteStream(filename);
-
-    csvStream.pipe(writableStream);
-
-    function exportCategories(bc_api, path) {
-        bc_api.get(`/catalog/categories${path}`)
-            .then(categories => {
-                streamToCSV(categories.data, categories.meta.pagination);
-            })
-            .catch(err => res.send(`Export error: ${err}.}`));
-    }
-
-    function streamToCSV(categories, meta) {
-        
-        const category_list = categories.map(category => Object.assign({}, category));
-
-        function determinePageForCSV(current_categories) {
-            if (meta.current_page < meta.total_pages) {
-                current_categories.forEach(writeToCSV);
-            }
-            if (meta.current_page == meta.total_pages) {
-                current_categories.forEach(writeAndPublishCSV);
-            }
-            function writeToCSV(element, index, array) {
-                if (index == array.length - 1) {
-                    csvStream.write(formatExportContent(element));
-                    const path = meta.links.next;
-                    exportCategories(bc, path);
-                } else {
-                    csvStream.write(formatExportContent(element));
+    .then(bc => {
+        const Category = new Categories(bc);
+        Category.initExport();
+        Category.on('exportReady', () => {
+            const filename = Category.Streams.filename;
+            res.download(filename, (err) => {
+                if (err) {
+                    console.log(`csv send err: ${err}`);
                 }
-            }
-            function writeAndPublishCSV(element, index, array) {
-                if (index == array.length - 1) {
-                    csvStream.write(formatExportContent(element));
-                    sendCSV();
-                } else {
-                    csvStream.write(formatExportContent(element));
-                }
-            }
-            function formatExportContent(category) {
-                return {
-                    'Category ID': parseInt(category['id']),
-                    'Parent ID': parseInt(category['parent_id']),
-                    'Category Name': category['name'],
-                    'Category Description': category['description'],
-                    'Sort Order': category['sort_order'],
-                    'Page Title': category['page_title'],
-                    'Meta Keywords': category['meta_keywords'],
-                    'Meta Description': category['meta_description'],
-                    'Category Image URL': category['image_url'],
-                    'Category Visible': BoolString.ToYesNo(category['is_visible']),
-                    'Search Keywords': category['search_keywords'],
-                    'Default Product Sort': category['default_product_sort'],
-                    'Category URL': category['custom_url']['url'],
-                    'Custom URL': BoolString.ToYesNo(category['custom_url']['is_customized']),
-                };
-            }
-        }
-
-        determinePageForCSV(category_list);
-
-        function sendCSV() {
-            csvStream.end();
-            writableStream.on('finish', function() {
-                console.log('Done with CSV');
-                res.download(filename, (err) => {
+                fs.unlink(filename, (err) => {
                     if (err) {
-                        console.log(`csv send err: ${err}`);
+                        throw err;
                     }
-                    else {
-                        fs.unlink(filename, (err) => {
-                            if (err) {
-                                throw err;
-                            }
-                            console.log(`${filename} removed after download`);
-                        });
-                    }
+                    console.log(`${filename} removed after download`);
                 });
             });
-        }
-    }
+        });
+    })
+    .catch(err => console.log('Export route error:', err));
 });
 
 //Import a CSV and create categories
