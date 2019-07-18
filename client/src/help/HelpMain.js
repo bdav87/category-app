@@ -1,19 +1,31 @@
 import { Link } from 'react-router-dom';
-import { Table } from 'react-bootstrap';
+import { Table, Card, Button } from 'react-bootstrap';
+import backArrow from '../static/left-arrow.svg';
 
 const HelpMain = (props) => {
     const { loadMain } = props;
     return (
         <div>
-            <h1>Help</h1>
-            <Link to='/'><button onClick={loadMain}>Go back</button></Link>
+            
             <article>
-                <p>To upload a CSV, you can drag and drop your file or click the upload link.</p>
-                <p>After a file is submitted for import, you can leave the page and come back later to check on the progress.</p>
-                <p>
-                When importing new categories, the CSV headers described below must be present. 
-                An easy way to get a template to work with is to export your existing categories.
-                </p>
+                <Card>
+                    <Card.Body>
+                    <Card.Title>
+                        Help
+                    </Card.Title>
+                    <p>
+                    An easy way to start is to export your categories, then build off the exported file.
+                    </p>
+                    <p>To upload a CSV, you can drag and drop your file or click the upload link.</p>
+                    <p>After a file is submitted for import, you can leave the page and come back later to check on the progress.</p>
+                    
+                    </Card.Body>
+                    <Card.Footer>
+                    <Link to='/'><Button variant='secondary' onClick={loadMain} className='imgBtn'><img src={backArrow} style={{maxWidth: '32px'}}/><span>Go back</span></Button></Link>
+                    </Card.Footer>
+                   
+                </Card>
+                
                 <Table>
                     <tbody>
                     <tr>

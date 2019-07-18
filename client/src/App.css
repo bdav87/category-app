@@ -1,20 +1,28 @@
 .App {
   font-family: Arial, Helvetica, sans-serif;
-  background: rgb(245, 245, 245);
+  background: rgb(247, 255, 254);
   min-height: 100vh;
   padding: 24px;
+  max-width: 1080px;
+  margin: 0 auto;
 }
-.card {
-  max-width:280px;
+.card.navCard {
+  max-width: 280px;
   margin: 0 auto 16px;
 }
 .card-deck {
   justify-content: center;
 }
-.card:hover {
+.card.navCard:hover {
   box-shadow: 0px 5px 4px  #0000001d;
   cursor: pointer;
   filter: brightness(115%);
+}
+
+.exportCardBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 a {
@@ -24,4 +32,16 @@ a {
 a:hover {
   color: #FFF;
   text-decoration: none;
+}
+
+.imgBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  min-width: 196px;
+}
+
+.exportContainer {
+  display: flex;
+  justify-content: space-evenly;
 }

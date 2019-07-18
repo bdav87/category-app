@@ -5,7 +5,7 @@ import questionSVG from '../static/question-mark.svg';
 
 const HelpCard = () => {
   return (
-    <Card bg="success" text="white">
+    <Card bg="success" text="white" className='navCard'>
       <Link to='/help' style={{height: '100%'}}>
         <Card.Header>
           <div style={{

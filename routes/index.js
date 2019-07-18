@@ -16,7 +16,7 @@ router.get('/', function(req, res) {
       }
     } 
     else {
-      res.status('403').end();
+      res.status('404').end();
     }
 });
 

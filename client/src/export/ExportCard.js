@@ -4,7 +4,7 @@ import downloadSVG from '../static/download.svg';
 
 const ExportCard = () => {
         return (
-        <Card bg="primary" text="white">
+        <Card bg="primary" text="white" className='navCard'>
             <Link to='/export' style={{height: '100%'}}>
             <Card.Header >
                 <div style={{

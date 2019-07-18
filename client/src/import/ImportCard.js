@@ -4,7 +4,7 @@ import importSVG from '../static/import.svg';
 
 const ImportCard = () => {
     return (
-        <Card bg="info" text="white">
+        <Card bg="info" text="white" className='navCard'>
         <Link to='/import' style={{height: '100%'}}>
           <Card.Header>
           <div style={{
